@@ -1,0 +1,29 @@
+.list {
+  margin: 20px; 
+  background-color: #da70ae;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column; 
+}
+
+.add-card-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #da70ae;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  font-family: 'Caveat', cursive;
+}
+
+.add-card-button:hover {
+  background-color: #5cebe4;
+}

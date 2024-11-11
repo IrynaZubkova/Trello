@@ -1,50 +1,54 @@
-import React from 'react';
-// import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
-import {
-  BrowserRouter as Router,
-  Routes, 
-  Route,
-  Link,
-} from 'react-router-dom';
+import { HashRouter, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import Board from './pages/Home/components/Board/Board'; // Імпорт Board з другого файлу
+import api from './api/request'; // Імпорт axios екземпляра
 
-
-import { Board } from './pages/Board/Board';
-
-function Home(): JSX.Element {
-  return (
-    <div className="footer">
-      <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-        Learn React
-      </a>
-    </div>
-  );
+interface BoardType {
+  id: number;
+  title: string;
+  background: string;
 }
 
 function App(): JSX.Element {
+  const [board, setBoards] = useState<BoardType[]>([]); // Стан для зберігання дошок
+  const [error, setError] = useState<string | null>(null); // Стан для зберігання помилок
+
+  useEffect(() => {
+    const fetchBoards = async (): Promise<void> => {
+      try {
+        const response = await api.get('/board');
+        setBoards(response.data); // Переконайтеся, що server повертає масив об'єктів
+      } catch (err) {
+        setError('Не вдалося завантажити дошки');
+      }
+    };
+
+    fetchBoards(); // Викликаємо функцію для отримання дошок
+  }, []);
+
   return (
-    <Router>
+    <HashRouter>
       <div className="App">
         <header className="App-header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
           <nav>
             <ul>
               <li>
-              <Link to="/" className="nav-link">Home</Link>
-              </li>
-              <li>
-              <Link to="/board" className="nav-link">Board</Link>
+                <Link to="/" className="nav-link">
+                  Home
+                </Link>
               </li>
             </ul>
           </nav>
         </header>
-
+        {error && <div>{error}</div>} {/* Виводимо повідомлення про помилку, якщо є */}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/board" element={<Board />} />
+          <Route path="/" element={<Home board={board} />} /> {/* Передаємо дошки в Home */}
+          <Route path="/board/:board_id" element={<Board />} />
         </Routes>
       </div>
-    </Router>
+    </HashRouter>
   );
 }
 

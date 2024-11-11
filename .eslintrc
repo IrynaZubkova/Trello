@@ -56,7 +56,8 @@
       "no-alert": "error",
       "eol-last": "error",
       "semi": "error",
-      "no-console": "error"
+      "no-console": "error",
+      "react/function-component-definition": "off"
     },
     "overrides": []
   }

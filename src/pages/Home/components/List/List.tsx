@@ -1,13 +1,13 @@
 import React from 'react';
-import { ICard } from '../../../../common/interfaces/ICard'; 
-import './list.scss'; 
-import { Card } from '../Card/Card';
+import { ICard } from '../../../../common/interfaces/ICard';
+import './list.scss';
+
 interface ListProps {
   title: string;
   cards: ICard[];
 }
 
-const List: React.FC<ListProps> = ({ title, cards }) => {
+function List({ title, cards }: ListProps): React.ReactElement {
   return (
     <div className="list">
       <h2>{title}</h2>
@@ -19,6 +19,6 @@ const List: React.FC<ListProps> = ({ title, cards }) => {
       <button className="add-card-button">Додати картку</button>
     </div>
   );
-};
+}
 
 export default List;

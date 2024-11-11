@@ -4,32 +4,31 @@
   display: flex;
   overflow-x: auto;
   font-family: 'Caveat', cursive;
-  white-space: nowrap; 
+  white-space: nowrap;
   scroll-behavior: smooth;
   justify-content: center;
 }
 
 .list {
-  min-width: 200px; 
-  flex-shrink: 0; 
+  min-width: 200px;
+  flex-shrink: 0;
 }
 
 .add-list-button {
   background-color: #f0e68c;
   color: #cfa6d8;
-  font-size: 30px; 
+  font-size: 30px;
   border: none;
-  border-radius: 5px; 
-  cursor: pointer; 
-  transition: background-color 0.3s; 
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
   font-family: 'Caveat', cursive;
 
   &:hover {
-    background-color: #6419b9; 
+    background-color: #6419b9;
   }
 }
 
 h1 {
-  color: #d485b6; 
+  color: #d485b6;
 }
-

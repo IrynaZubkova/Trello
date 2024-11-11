@@ -11,7 +11,7 @@ export interface BoardType {
 interface HomeProps {
   board: BoardType[];
 }
-
+// word
 const Home: React.FC<HomeProps> = ({ board }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleBoardCreated = (newBoardTitle: string): void => {

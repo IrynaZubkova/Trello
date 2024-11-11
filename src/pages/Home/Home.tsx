@@ -1,6 +1,8 @@
 /* eslint-disable */
 import React, { useState } from 'react';
 import Modal from './components/Modal/Modal';
+import { apiCreateBoard } from '../../api/boards';
+
 
 export interface BoardType {
   id: number;
@@ -10,12 +12,16 @@ export interface BoardType {
 
 interface HomeProps {
   board: BoardType[];
+  update: any;
 }
 // word
-const Home: React.FC<HomeProps> = ({ board }) => {
+const Home: React.FC<HomeProps> = ({ board, update }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleBoardCreated = (newBoardTitle: string): void => {
-  setIsModalOpen(false); 
+  const handleBoardCreated = async (newBoardTitle: string)=> {
+    const newBoard = await apiCreateBoard(newBoardTitle);
+    console.log("response", newBoard);
+    update();
+    setIsModalOpen(false);
   };
 
   return (

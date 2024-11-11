@@ -1,6 +1,7 @@
+import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import api from '../../../../api/request';
-import { useParams } from 'react-router-dom';
+
 
 // Інтерфейс для дошки
 interface BoardData {

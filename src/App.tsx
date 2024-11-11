@@ -1,3 +1,5 @@
+/* eslint-disable */
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import { HashRouter, Routes, Route, Link } from 'react-router-dom';
@@ -10,21 +12,23 @@ interface BoardType {
   title: string;
   background: string;
 }
+// interface Boards {
+//   boards: Array<BoardType>;
+// }
 
 function App(): JSX.Element {
   const [board, setBoards] = useState<BoardType[]>([]); // Стан для зберігання дошок
   const [error, setError] = useState<string | null>(null); // Стан для зберігання помилок
-
+  const fetchBoards = async (): Promise<void> => {
+    try {
+      const response = await api.get('/board');
+      console.log("responce", response, response.data)
+      setBoards(response.boards); // Переконайтеся, що server повертає масив об'єктів
+    } catch (err) {
+      setError('Не вдалося завантажити дошки');
+    }
+  };
   useEffect(() => {
-    const fetchBoards = async (): Promise<void> => {
-      try {
-        const response = await api.get('/board');
-        setBoards(response.data); // Переконайтеся, що server повертає масив об'єктів
-      } catch (err) {
-        setError('Не вдалося завантажити дошки');
-      }
-    };
-
     fetchBoards(); // Викликаємо функцію для отримання дошок
   }, []);
 
@@ -44,7 +48,7 @@ function App(): JSX.Element {
         </header>
         {error && <div>{error}</div>} {/* Виводимо повідомлення про помилку, якщо є */}
         <Routes>
-          <Route path="/" element={<Home board={board} />} /> {/* Передаємо дошки в Home */}
+          <Route path="/" element={<Home board={board} update={fetchBoards} />} /> {/* Передаємо дошки в Home */}
           <Route path="/board/:board_id" element={<Board />} />
         </Routes>
       </div>

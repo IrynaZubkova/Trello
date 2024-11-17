@@ -1,8 +1,28 @@
-.home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.home-container {
   padding: 20px;
+  font-family: 'Caveat', cursive;
+}
+
+.home-title {
+  color: #d485b6;
+  font-size: 24px;
+  text-align: center;
+}
+
+.add-board-button {
+  background-color: #f0e68c;
+  color: #cfa6d8;
+  font-size: 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  margin: 10px auto;
+}
+
+.add-board-button:hover {
+  background-color: #6419b9;
 }
 
 .boards-list {
@@ -11,17 +31,29 @@
   justify-content: center;
 }
 
-.add-board-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.board-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 20px;
+  min-width: 200px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-  &:hover {
-    background-color: #0056b3;
-  }
+.board-title {
+  font-size: 22px;
+  color: #5cebe4;
+  cursor: pointer;
+  transition: color 0.3s;
+  margin-bottom: 80px;
+  margin-top: -15px;
+}
+
+.board-title:hover {
+  color: #6419b9;
 }

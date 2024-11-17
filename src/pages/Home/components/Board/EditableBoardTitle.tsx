@@ -1,56 +1,70 @@
 import React, { useState } from 'react';
-import api from '../../../../api/request';
+import { apiEditBoard } from '../../../../api/boards';
+
+interface BoardData {
+  id: number;
+  title: string;
+  background: string;
+}
 
 interface EditableBoardTitleProps {
-  board: { id: number; title: string };
+  board: BoardData;
   fetchBoards: () => void;
 }
 
 const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(board.title);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newTitle, setNewTitle] = useState<string>(board.title);
   const [error, setError] = useState<string | null>(null);
 
-  const handleEditTitle = async () => {
-    if (!newTitle) {
-      setError('Назва дошки не повинна бути порожньою');
-      return;
-    }
-  
-    const regex = /^[a-zA-Z0-9аА\s\-_\.]+$/; 
-    if (!regex.test(newTitle)) {
+  const regex = /^[a-zA-Z0-9аАєЄіїІї\s\-_\.]+$/;
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (!regex.test(value)) {
       setError('Назва дошки містить недопустимі символи');
-      return;
+    } else {
+      setError(null);
     }
+    setNewTitle(value);
+  };
+
+  const handleSave = async () => {
+    if (error) return;
 
     try {
-      await api.put(`/boards/${board.id}`, { title: newTitle });
-      fetchBoards(); 
-      setIsEditing(false); 
-      setError(null); 
-    } catch (err) {
-      setError('Не вдалося редагувати дошку');
+      await apiEditBoard(board.id, newTitle);
+      fetchBoards();
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Помилка при оновленні дошки:', error);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !error) {
+      handleSave();
     }
   };
 
   return (
-    <div onClick={() => setIsEditing(true)}>
-      {isEditing ? (
-        <input
-          type="text"
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-          onBlur={handleEditTitle} 
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              handleEditTitle(); 
-            }
-          }}
-        />
-      ) : (
-        <span>{board.title}</span>
-      )}
-      {error && <div>{error}</div>}
+    <div className="board-item">
+      <div className="board-title">
+        {isEditing ? (
+          <div>
+            <input
+              type="text"
+              value={newTitle}
+              onChange={handleTitleChange}
+              onBlur={handleSave}
+              onKeyDown={handleKeyDown}
+            />
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+          </div>
+        ) : (
+          <span onClick={() => setIsEditing(true)}>{board.title}</span>
+        )}
+      </div>
     </div>
   );
 };

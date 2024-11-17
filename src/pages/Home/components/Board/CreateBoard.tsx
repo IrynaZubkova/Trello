@@ -20,7 +20,7 @@ const CreateBoard: React.FC<CreateBoardProps> = ({ onCardCreated }) => {
       return;
     }
  
-    const regex = /^[a-zA-Z0-9аА\s\-_\.]+$/;
+    const regex = /^[a-zA-Z0-9а-щА-ЩьюяєіїІїґҐ\s\-_\.]+$/;
     if (!regex.test(title)) {
       setError('Назва дошки містить недопустимі символи');
       return;

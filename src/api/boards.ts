@@ -1,4 +1,4 @@
-import { CREATE_BOARD } from './routes';
+import { CREATE_BOARD, EDIT_BOARD} from './routes';
 import api from './request';
 
 const apiCreateBoard = async function(title:string) {
@@ -8,6 +8,14 @@ const apiCreateBoard = async function(title:string) {
     throw error;
   }
 };
-//тут можна добавляти нові функції
 
-export {apiCreateBoard}
+const apiEditBoard = async function(id: number, title: string) {
+  try {
+    return await api.put(`${EDIT_BOARD}/${id}`, { title });
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export {apiCreateBoard, apiEditBoard}

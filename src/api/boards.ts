@@ -1,4 +1,4 @@
-import { CREATE_BOARD, EDIT_BOARD} from './routes';
+import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD } from './routes';
 import api from './request';
 
 const apiCreateBoard = async function(title:string) {
@@ -16,6 +16,15 @@ const apiEditBoard = async function(id: number, title: string) {
     throw error;
   }
 };
+
+const apiDeleteBoard = async function (id: number) {
+  try {
+    return await api.delete(`${DELETE_BOARD}/${id}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 
 export {apiCreateBoard, apiEditBoard}

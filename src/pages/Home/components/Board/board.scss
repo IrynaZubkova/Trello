@@ -64,3 +64,17 @@ h1 {
     background-color: #6419b9;
   }
 }
+
+.delete-board-button {
+  background-color: red;
+  color: red;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.delete-board-button:hover {
+  background-color: darkred;
+}

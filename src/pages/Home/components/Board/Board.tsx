@@ -2,35 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../../api/request';
 import EditableBoardTitle from './EditableBoardTitle';
+import EditableBoardBackground from './EditableBoardBackground';
 import './board.scss';
 
+
 // Інтерфейси
-interface BoardData {
-  id: number;
-  title: string;
+interface BoardProps {
+  board: {
+    id: number;
+    title: string;
+    background: string;
+  };
+  fetchBoards: () => void;
 }
 
-interface BoardsResponse {
-  boards: BoardData[];
+interface BoardProps {
+  board: {
+    id: number;
+    title: string;
+    background: string;
+  };
+  fetchBoards: () => void;
 }
 
-const Board: React.FC = () => {
+const Board: React.FC <BoardProps> = ({board, fetchBoards}) => {
   const { board_id } = useParams<{ board_id: string }>();
-  const [board, setBoard] = useState<BoardData | null>(null);
+  const [background, setBackground] = useState<string>(board.background);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Функція для завантаження конкретної дошки
-  const fetchBoard = async (): Promise<void> => {
-    try {
-      const response = await api.get<BoardsResponse>('/board');
-      const foundBoard = response.data.boards.find(
-        (board: BoardData) => board.id.toString() === board_id
-      );
-      setBoard(foundBoard || null);
-    } catch (err) {
-      setError('Не вдалося завантажити дошку');
-    }
+  const handleBackgroundChange = (newColor: string) => {
+    setBackground(newColor); // Оновлюємо локальний стан
+    console.log(`Колір дошки ${board.id} змінено на:`, newColor);
   };
 
   // Обробник для видалення дошки
@@ -39,26 +42,28 @@ const Board: React.FC = () => {
       const confirmDelete = window.confirm(`Ви дійсно хочете видалити дошку "${board.title}"?`);
       if (confirmDelete) {
         try {
-          await api.delete(`/board/${board.id}`); // Видалення дошки за її ID
-          navigate('/'); // Перенаправлення на головну сторінку після видалення
+          await api.delete(`/board/${board.id}`);
+        fetchBoards();
         } catch (err) {
           setError('Не вдалося видалити дошку');
         }
       }
     }
   };
-
-  useEffect(() => {
-    fetchBoard();
-  }, [board_id]);
-
   return (
     <div className="board-container">
       {error && <div className="error-message">{error}</div>}
       {board ? (
         <div className="board">
-          <EditableBoardTitle board={board} fetchBoards={fetchBoard} />
-          {/* Кнопка для видалення дошки, прив'язана до board.id */}
+          <EditableBoardTitle board={board} fetchBoards={fetchBoards} />
+          
+          <EditableBoardBackground
+          boardId={board.id}
+          initialBackground={background}
+          onBackgroundChange={handleBackgroundChange} // Передаємо функцію
+          fetchBoards={fetchBoards}
+        />
+          
           <button
             className="delete-board-button"
             onClick={handleDeleteBoard}

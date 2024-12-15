@@ -15,7 +15,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
       alert('Назва дошки не повинна бути порожньою');
       return;
     }
-    const regex = /^[a-zA-Z0-9аА\s\-_\.]+$/;
+    const regex = /^[a-zA-Z0-9а-яА-ЯєЄіїІїґҐ\s\-_\.]+$/;
     if (!regex.test(title)) {
       alert('Назва дошки містить недопустимі символи');
       return;

@@ -9,16 +9,16 @@ interface BoardData {
 
 interface EditableBoardTitleProps {
   board: BoardData;
+  background: string;
   fetchBoards: () => void;
 }
 
-const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards }) => {
+const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards, background}) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>(board.title);
   const [error, setError] = useState<string | null>(null);
 
-  const regex = /^[a-zA-Z0-9аАєЄіїІї\s\-_\.]+$/;
-
+  const regex = /^[a-zA-Z0-9а-яА-ЯєЄіїІїґҐ\s\-_\.]+$/;
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (!regex.test(value)) {
@@ -48,7 +48,7 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
   };
 
   return (
-    <div className="board-item">
+    <div className="board-item" style={{backgroundColor: background}}>
       <div className="board-title">
         {isEditing ? (
           <div>

@@ -1,20 +1,25 @@
-.home-container {
-  padding: 20px;
-  font-family: 'Caveat', cursive;
+.Content {
+  display: flex;
+  flex-wrap: wrap; /* Дошки будуть переноситися на новий рядок, якщо не поміщаються */
+  gap: 20px; /* Відступи між дошками */
+  margin-top: 20px; /* Відступ зверху для більшого простору */
+  justify-content: space-around;
 }
 
-.home-title {
-  color: #d485b6;
-  font-size: 24px;
-  text-align: center;
+.board-list-title {
+  font-size: 28px; /* Розмір шрифта */
+  color: #121279; /* Колір тексту */
+  text-align: center; /* Вирівнювання тексту по центру */
+  font-family: 'Caveat', cursive; /* Шрифт */
 }
 
 .add-board-button {
-  background-color: #f0e68c;
-  color: #cfa6d8;
+  background-color: #ffffff;
+  color: #5cebe4;
   font-size: 20px;
   border: none;
   border-radius: 5px;
+  padding: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
   display: block;
@@ -22,27 +27,20 @@
 }
 
 .add-board-button:hover {
-  background-color: #6419b9;
-}
-
-.boards-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  color: #6419b9;
 }
 
 .board-item {
-  background-color: #f9f9f9;
+  // background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 10px;
-  margin: 10px;
   padding: 20px;
-  min-width: 200px;
   text-align: center;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  height: 190px;
 }
 
 .board-title {

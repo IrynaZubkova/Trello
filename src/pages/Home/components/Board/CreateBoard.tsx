@@ -19,12 +19,7 @@ const CreateBoard: React.FC<CreateBoardProps> = ({ onCardCreated }) => {
       setError('Назва дошки не повинна бути порожньою');
       return;
     }
- 
-    const regex = /^[a-zA-Z0-9а-щА-ЩьюяєіїІїґҐ\s\-_\.]+$/;
-    if (!regex.test(title)) {
-      setError('Назва дошки містить недопустимі символи');
-      return;
-    }
+
 
     try {
       const response = await api.post('/boards', { title }); 

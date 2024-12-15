@@ -51,11 +51,11 @@ const Board: React.FC <BoardProps> = ({board, fetchBoards}) => {
     }
   };
   return (
-    <div className="board-container">
+    <div className="board-container" >
       {error && <div className="error-message">{error}</div>}
       {board ? (
-        <div className="board">
-          <EditableBoardTitle board={board} fetchBoards={fetchBoards} />
+        <div className="board" >
+          <EditableBoardTitle background={background}  board={board} fetchBoards={fetchBoards} />
           
           <EditableBoardBackground
           boardId={board.id}
@@ -64,6 +64,8 @@ const Board: React.FC <BoardProps> = ({board, fetchBoards}) => {
           fetchBoards={fetchBoards}
         />
           
+{/* <Home background={background} /> */}
+
           <button
             className="delete-board-button"
             onClick={handleDeleteBoard}

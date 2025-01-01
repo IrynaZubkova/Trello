@@ -1,57 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from './components/Modal/Modal';
 import { apiCreateBoard } from '../../api/boards';
 import './home.scss';
 import Board from './components/Board/Board';
-export interface BoardType {
-  id: number;
-  title: string;
-  background: string;
-}
-interface HomeProps {
-  background: string;
-  board: BoardType[];
-  update: any;
-}
-const Home: React.FC<HomeProps> = ({ board, update, background }) => {
+import { BoardData } from './components/Board/EditableBoardTitle';
 
+interface HomeProps {
+  board: BoardData[]; // Пропс для дошок
+  update: (boards: BoardData[]) => void; // Функція для оновлення дошок
+}
+
+const Home: React.FC<HomeProps> = ({ board = [], update }) => { // Ініціалізація board
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleBoardCreated = async (newBoardTitle: string) => {
-    const newBoard = await apiCreateBoard(newBoardTitle);
-    console.log('response', newBoard);
-    update();
-    setIsModalOpen(false);
+  const [boards, setBoards] = useState<BoardData[]>(board);
+
+  useEffect(() => {
+    setBoards(board); // Оновлюємо board з пропсів
+  }, [board]);
+
+  const handleBoardCreated = async (newBoardTitle: string, newBoardColor: string) => {
+    try {
+      console.log('Створюємо дошку з назвою:', newBoardTitle, 'та кольором:', newBoardColor);
+      const newBoard = await apiCreateBoard(newBoardTitle, { backgroundColor: newBoardColor });
+      console.log('Створена дошка:', newBoard);
+
+      const updatedBoards = [...boards, {
+        id: newBoard.id,
+        title: newBoardTitle,
+        custom: { backgroundColor: newBoardColor }
+      }];
+      setBoards(updatedBoards);
+      update(updatedBoards); // Оновлюємо дошки
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Помилка при створенні дошки:', error);
+    }
+  };
+
+  const handleBackgroundChange = (boardId: number, newBackground: string) => {
+    const updatedBoards = boards.map((b) =>
+      b.id === boardId ? { ...b, custom: { backgroundColor: newBackground } } : b
+    );
+    setBoards(updatedBoards);
+    update(updatedBoards); // Оновлення дошок
   };
 
   return (
     <div>
       <h1 className="board-list-title">Список Дошок</h1>
       <button className="add-board-button" onClick={() => setIsModalOpen(true)}>Додати дошку</button>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onCreate={handleBoardCreated} />
-      {/*{board && board.length > 0 ? (*/}
-      {/*  board.map((b) => (*/}
-      {/*    <EditableBoardTitle key={b.id} board={b} fetchBoards={update} />*/}
-      {/*  ))*/}
-      {/*) : (*/}
-      {/*  <p>Дошок немає.</p>*/}
-      {/*)}*/}
+      
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreate={handleBoardCreated}
+      />
+      
       <div className="Content">
-      {board && board.length > 0 ? (
-        board.map((b) => (
-        <Board key={b.id} board={b} fetchBoards={update} />
-        ))
-      ) : (
-        <p>Дошок немає.</p>
-      )}
+        {boards.length > 0 ? (
+          boards.map((boardItem) => (
+            <Board
+              key={boardItem.id}
+              board={boardItem}
+              fetchBoards={() => update(boards)}
+              onBackgroundChange={handleBackgroundChange}
+            />
+          ))
+        ) : (
+          <p>Дошок немає.</p>
+        )}
       </div>
-
-      <div
-      className="board-item"
-      style={{ backgroundColor: background }} // Застосовуємо динамічний стиль
-    >
-      {/* Вміст компонента */}
-    </div>
-
     </div>
   );
 };

@@ -4,11 +4,12 @@ import './Modal.scss'; // Стилі для модального вікна
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (title: string) => void;
+  onCreate: (title: string, color: string) => void; // Додано параметр color
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
   const [title, setTitle] = React.useState('');
+  const [color, setColor] = React.useState('#ffffff'); // Початковий колір (білий)
 
   const handleCreateClick = () => {
     if (title.trim() === '') {
@@ -20,19 +21,32 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
       alert('Назва дошки містить недопустимі символи');
       return;
     }
-    onCreate(title); // Викликаємо onCreate з назвою
-    setTitle(''); // Очищуємо поле
-    onClose(); // Закриваємо модальне вікно
+    onCreate(title, color); 
+    setTitle(''); 
+    onClose(); 
   };
-  
 
   if (!isOpen) return null;
 
+  //відображення модального вікна:
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Додати нову дошку</h2>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Назва нової дошки" />
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Назва нової дошки"
+        />
+        <label>
+          Оберіть колір фону:
+          <input
+            type="color"
+            value={color}
+            onChange={(e) => setColor(e.target.value)} // Змінюємо колір
+          />
+        </label>
         <button onClick={handleCreateClick}>Додати</button>
         <button onClick={onClose}>Закрити</button>
       </div>
@@ -40,4 +54,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
   );
 };
 
-export default Modal;
+export default Modal

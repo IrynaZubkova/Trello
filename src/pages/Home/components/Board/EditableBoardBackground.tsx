@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../../../api/request';
+import { title } from 'process';
 
 interface EditableBoardBackgroundProps {
   boardId: number;
@@ -23,7 +24,7 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
     onBackgroundChange(newColor);
     try {
       // Оновлюємо колір у бекенді
-      await api.put(`/board/${boardId}`, { background: newColor });
+      await api.put(`/board/${boardId}`, { custom: {backgroundColor: newColor}});
       fetchBoards(); // Оновлюємо списки дошок
     } catch (err) {
       console.error('Не вдалося оновити колір фону:', err);

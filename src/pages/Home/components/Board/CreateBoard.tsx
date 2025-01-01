@@ -1,41 +1,65 @@
 import React, { useState } from 'react';
-import api from '../../../../api/request'; 
+import api from '../../../../api/request';
+
 export interface BoardType {
   id: number;
   title: string;
-  background: string; 
+  custom?: { backgroundColor: string };
 }
 
 interface CreateBoardProps {
-  onCardCreated: (newBoard: BoardType) => void; 
+  onBoardCreated: (newBoard: BoardType) => void;
 }
 
-const CreateBoard: React.FC<CreateBoardProps> = ({ onCardCreated }) => {
+const CreateBoard: React.FC<CreateBoardProps> = ({ onBoardCreated }) => {
   const [title, setTitle] = useState('');
+  const [color, setColor] = useState('#ffffff'); // Початковий колір
   const [error, setError] = useState<string | null>(null);
 
   const handleCreateBoard = async () => {
-    if (!title) {
+    // Валідація введення
+    if (!title.trim()) {
       setError('Назва дошки не повинна бути порожньою');
       return;
     }
 
-
     try {
-      const response = await api.post('/boards', { title }); 
-      onCardCreated(response.data); 
-      setTitle('');
-      setError(null); 
+      const response = await api.post('/boards', { title, backgroundColor: color });
+// const [backgroundColor, setBackgroundColor] = useState<string>(initialBackground);
+        const newBoard: BoardType = response.data;
+
+        // Передаємо нову дошку до батьківського компонента
+        onBoardCreated(newBoard);
+
+        // Скидаємо стан після успішного створення
+        setTitle('');
+        setColor('#ffffff'); // Повертаємо стандартний колір
+        setError(null); // Скидаємо помилку
+      
     } catch (err) {
-      setError('Не вдалося створити дошку');
+      console.error(err);
+      setError('Не вдалося створити дошку. Перевірте підключення.');
     }
   };
 
   return (
     <div>
-      <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Назва нової дошки" />
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Назва нової дошки"
+      />
+      <label>
+        Оберіть колір:
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+        />
+      </label>
       <button onClick={handleCreateBoard}>Додати</button>
-      {error && <div>{error}</div>}
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };

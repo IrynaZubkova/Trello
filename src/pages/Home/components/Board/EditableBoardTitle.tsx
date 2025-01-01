@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { apiEditBoard } from '../../../../api/boards';
 
-interface BoardData {
+export interface BoardData {
   id: number;
   title: string;
-  background: string;
+  custom?: { backgroundColor: string };
 }
 
 interface EditableBoardTitleProps {
   board: BoardData;
-  background: string;
   fetchBoards: () => void;
+  backgroundColor: string;
+ 
 }
 
-const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards, background}) => {
+const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards, backgroundColor}) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>(board.title);
   const [error, setError] = useState<string | null>(null);
@@ -47,8 +48,14 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
     }
   };
 
+  const handleBackgroundChange = () => {
+    // Приклад функції для зміни фону
+    const newColor = 'red'; // Замість цього ви можете отримати колір з іншого джерела (наприклад, через input або picker)
+    handleBackgroundChange();
+  };
+
   return (
-    <div className="board-item" style={{backgroundColor: background}}>
+    <div className="board-item" style={{ backgroundColor }}>
       <div className="board-title">
         {isEditing ? (
           <div>

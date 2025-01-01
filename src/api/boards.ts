@@ -1,10 +1,38 @@
-import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD } from './routes';
+import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD, EDIT_BOARD_BACKGROUND_COLOR } from './routes';
 import api from './request';
 
-const apiCreateBoard = async function(title:string) {
+
+interface BoardData {
+  id: number;
+  title: string;
+  custom?: {
+    backgroundColor: string };
+}
+
+
+interface ApiResponse<T> {
+  data: T;
+
+}
+
+export const apiGetBoards = async () => {
   try {
-    return await api.post(CREATE_BOARD, { title });
+    const response = await api.get('/boards'); // тут треба вказати реальний маршрут
+    return response.data; // повертаємо дані з відповіді
   } catch (error) {
+    console.error('Помилка при отриманні дошок:', error);
+    throw error; // кидаємо помилку, якщо щось пішло не так
+  }
+};
+
+const apiCreateBoard = async (
+  title: string,
+  custom?: { backgroundColor: string }
+): Promise<{ result: string; id: number }> => {
+  try {
+    return await api.post<{ result: string; id: number }, any >(CREATE_BOARD, { title, custom });
+  } catch (error) {
+    console.error('Помилка при створенні дошки:', error);
     throw error;
   }
 };
@@ -17,14 +45,19 @@ const apiEditBoard = async function(id: number, title: string) {
   }
 };
 
-const apiDeleteBoard = async function (id: number) {
+// Видалення дошки
+const apiDeleteBoard = async (id: number): Promise<void> => {
   try {
-    return await api.delete(`${DELETE_BOARD}/${id}`);
+    await api.delete(`${DELETE_BOARD}/${id}`);
   } catch (error) {
+    console.error('Помилка при видаленні дошки:', error);
     throw error;
   }
 };
 
+// Зміна кольору фону дошки
 
 
-export {apiCreateBoard, apiEditBoard}
+
+
+export { apiCreateBoard, apiEditBoard, apiDeleteBoard,  };

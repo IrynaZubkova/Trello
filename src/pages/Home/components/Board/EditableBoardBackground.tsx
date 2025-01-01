@@ -18,8 +18,8 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
   const [backgroundColor, setBackgroundColor] = useState<string>(initialBackground);
 
   // Обробник зміни кольору
-  const handleColorChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newColor = event.target.value;
+  const handleColorChange = async () => {
+    const newColor = backgroundColor; 
     setBackgroundColor(newColor); // Оновлюємо локальний стан
     onBackgroundChange(newColor);
     try {
@@ -38,9 +38,10 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
         <input
           type="color"
           value={backgroundColor}
-          onChange={handleColorChange}
           aria-label="Виберіть колір фону дошки"
+          onChange={(e) => setBackgroundColor(e.target.value)} // Оновлюємо стан
         />
+       <button onClick={handleColorChange}>Змінити колір</button>
       </label>
     </div>
   );

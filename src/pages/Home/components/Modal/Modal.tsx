@@ -1,11 +1,7 @@
 import React from 'react';
 import './Modal.scss'; // Стилі для модального вікна
+import {ModalProps} from '../../../../common/interfaces/ModalProps';
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreate: (title: string, color: string) => void; // Додано параметр color
-}
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
   const [title, setTitle] = React.useState('');

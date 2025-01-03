@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../../../api/request';
-
-export interface BoardType {
-  id: number;
-  title: string;
-  custom?: { backgroundColor: string };
-}
-
-interface CreateBoardProps {
-  onBoardCreated: (newBoard: BoardType) => void;
-}
+import { CreateBoardProps, BoardType } from '../../../../common/interfaces/CreateBoardProps';
 
 const CreateBoard: React.FC<CreateBoardProps> = ({ onBoardCreated }) => {
   const [title, setTitle] = useState('');
@@ -27,10 +18,8 @@ const CreateBoard: React.FC<CreateBoardProps> = ({ onBoardCreated }) => {
       const response = await api.post('/boards', { title, backgroundColor: color });
 // const [backgroundColor, setBackgroundColor] = useState<string>(initialBackground);
         const newBoard: BoardType = response.data;
-
         // Передаємо нову дошку до батьківського компонента
         onBoardCreated(newBoard);
-
         // Скидаємо стан після успішного створення
         setTitle('');
         setColor('#ffffff'); // Повертаємо стандартний колір

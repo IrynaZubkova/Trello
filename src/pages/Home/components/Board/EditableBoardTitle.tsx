@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
 import { apiEditBoard } from '../../../../api/boards';
+import { EditableBoardTitleProps } from '../../../../common/interfaces/EditableBoardTitleProps';
 
-export interface BoardData {
-  id: number;
-  title: string;
-  custom?: { backgroundColor: string };
-}
 
-interface EditableBoardTitleProps {
-  board: BoardData;
-  fetchBoards: () => void;
-  backgroundColor: string;
- 
-}
 
 const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards, backgroundColor}) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);

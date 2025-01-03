@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import api from '../../../../api/request';
-import { title } from 'process';
+import { EditableBoardBackgroundProps } from '../../../../common/interfaces/EditableBoardBackgroundProps';
 
-interface EditableBoardBackgroundProps {
-  boardId: number;
-  initialBackground: string;
-  onBackgroundChange: (color: string) => void; 
-  fetchBoards: () => void;
-}
 
 const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
   boardId,

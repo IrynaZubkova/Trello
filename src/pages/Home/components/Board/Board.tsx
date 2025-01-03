@@ -3,16 +3,7 @@ import api from '../../../../api/request';
 import EditableBoardTitle from './EditableBoardTitle';
 import EditableBoardBackground from './EditableBoardBackground';
 import './board.scss';
-import { BoardData } from './EditableBoardTitle';
-
-
-// Оновлення типу BoardProps
-interface BoardProps {
-  board: BoardData;
-  fetchBoards: () => void; // оновлення списку дошок після будь-якої зміни
-  onBackgroundChange: (boardId: number, newBackground: string) => void;
-}
-
+import { BoardProps } from '../../../../common/interfaces/BoardProps';
 
 const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange }) => {
   const [background, setBackground] = useState<string>(board?.custom?.backgroundColor || "#fff");
@@ -40,7 +31,6 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
     }
   };
   
-
   //відображення дошки і контенту в ній
   return (
     <div className="board-container">
@@ -63,10 +53,6 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
       </div>
     </div>
   );
-
-
-  
-
 };
 
 export default Board;

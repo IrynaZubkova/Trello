@@ -3,12 +3,8 @@ import Modal from './components/Modal/Modal';
 import { apiCreateBoard } from '../../api/boards';
 import './home.scss';
 import Board from './components/Board/Board';
-import { BoardData } from './components/Board/EditableBoardTitle';
-
-interface HomeProps {
-  board: BoardData[]; // Пропс для дошок
-  update: (boards: BoardData[]) => void; // Функція для оновлення дошок
-}
+import { BoardData } from '../../common/interfaces/EditableBoardTitleProps';
+import { HomeProps } from '../../common/interfaces/HomeProps';
 
 const Home: React.FC<HomeProps> = ({ board = [], update }) => { // Ініціалізація board
   const [isModalOpen, setIsModalOpen] = useState(false);

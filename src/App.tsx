@@ -6,15 +6,8 @@ import { HashRouter, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import Board from './pages/Home/components/Board/Board'; // Імпорт Board з другого файлу
 import api from './api/request'; // Імпорт axios екземпляра
+import { BoardType } from './common/interfaces/BoardType'; 
 
-interface BoardType {
-  id: number;
-  title: string;
-  background: string;
-}
-// interface Boards {
-//   boards: Array<BoardType>;
-// }
 
 function App(): JSX.Element {
   const [board, setBoards] = useState<BoardType[]>([]); // Стан для зберігання дошок

@@ -1,11 +1,7 @@
 import React from 'react';
 import { ICard } from '../../../../common/interfaces/ICard';
 import './list.scss';
-
-interface ListProps {
-  title: string;
-  cards: ICard[];
-}
+import {ListProps} from '../../../../common/interfaces/ListProps';
 
 function List({ title, cards }: ListProps): React.ReactElement {
   return (

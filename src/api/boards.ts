@@ -1,26 +1,11 @@
-import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD, EDIT_BOARD_BACKGROUND_COLOR } from './routes';
+import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD, GET_BOARD } from './routes';
 import api from './request';
 
-
-interface BoardData {
-  id: number;
-  title: string;
-  custom?: {
-    backgroundColor: string };
-}
-
-
-interface ApiResponse<T> {
-  data: T;
-
-}
-
-export const apiGetBoards = async () => {
+export const apiGetBoardById = async (id: string) => {
   try {
-    const response = await api.get('/boards'); // тут треба вказати реальний маршрут
-    return response.data; // повертаємо дані з відповіді
+    return await api.get(`${GET_BOARD}/${id}`);
   } catch (error) {
-    console.error('Помилка при отриманні дошок:', error);
+    console.error('Помилка при отриманні дошrb:', error);
     throw error; // кидаємо помилку, якщо щось пішло не так
   }
 };
@@ -60,4 +45,4 @@ const apiDeleteBoard = async (id: number): Promise<void> => {
 
 
 
-export { apiCreateBoard, apiEditBoard, apiDeleteBoard,  };
+export { apiCreateBoard, apiEditBoard, apiDeleteBoard };

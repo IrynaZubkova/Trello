@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ICard } from '../../../../common/interfaces/ICard';
 import './list.scss';
-import {ListProps} from '../../../../common/interfaces/ListProps';
+import { ListProps } from '../../../../common/interfaces/ListProps';
 
-function List({ title, cards }: ListProps): React.ReactElement {
+function List({ id, title, cards: initialCards }: ListProps): React.ReactElement {
+  const [cards, setCards] = useState<ICard[]>(initialCards);
+
+  const handleAddCard = () => {
+    const newCard = { id: Date.now(), title: 'Нова картка' };
+    setCards([...cards, newCard]); // Додаємо картку до стану
+    // Якщо використовуєте API, можна тут надіслати POST-запит для збереження
+  };
+
   return (
     <div className="list">
       <h2>{title}</h2>
@@ -12,7 +20,9 @@ function List({ title, cards }: ListProps): React.ReactElement {
           <li key={card.id}>{card.title}</li>
         ))}
       </ul>
-      <button className="add-card-button">Додати картку</button>
+      <button className="add-card-button" onClick={handleAddCard}>
+        Додати картку
+      </button>
     </div>
   );
 }

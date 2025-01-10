@@ -7,7 +7,7 @@ import Home from './pages/Home/Home';
 import Board from './pages/Home/components/Board/Board'; // Імпорт Board з другого файлу
 import api from './api/request'; // Імпорт axios екземпляра
 import { BoardType } from './common/interfaces/BoardType'; 
-
+import BoardPage from './pages/Home/components/Board/BoardPage';
 
 function App(): JSX.Element {
   const [board, setBoards] = useState<BoardType[]>([]); // Стан для зберігання дошок
@@ -39,10 +39,10 @@ function App(): JSX.Element {
             </ul>
           </nav>
         </header>
-        {error && <div>{error}</div>} {/* Виводимо повідомлення про помилку, якщо є */}
+        {error && <div>{error}</div>} 
         <Routes>
-          <Route path="/" element={<Home board={board} update={fetchBoards} />} /> {/* Передаємо дошки в Home */}
-          <Route path="/board/:board_id" element={<Board />} />
+          <Route path="/" element={<Home board={board} update={fetchBoards} />} /> 
+          <Route path="/board/:board_id" element={<BoardPage board={board}/>} />
         </Routes>
       </div>
     </HashRouter>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Modal from './components/Modal/Modal';
 import { apiCreateBoard } from '../../api/boards';
 import './home.scss';
@@ -23,7 +24,8 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => { // Ініціа�
       const updatedBoards = [...boards, {
         id: newBoard.id,
         title: newBoardTitle,
-        custom: { backgroundColor: newBoardColor }
+        custom: { backgroundColor: newBoardColor },
+        lists: [] 
       }];
       setBoards(updatedBoards);
       update(updatedBoards); // Оновлюємо дошки
@@ -53,18 +55,20 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => { // Ініціа�
       />
       
       <div className="Content">
-        {boards.length > 0 ? (
-          boards.map((boardItem) => (
-            <Board
-              key={boardItem.id}
-              board={boardItem}
-              fetchBoards={() => update(boards)}
-              onBackgroundChange={handleBackgroundChange}
-            />
-          ))
-        ) : (
-          <p>Дошок немає.</p>
-        )}
+      {boards.length > 0 ? (
+  boards.map((boardItem) => (
+    <div key={boardItem.id}>
+      <Board
+        board={boardItem}
+        fetchBoards={() => update(boards)}
+        onBackgroundChange={handleBackgroundChange}
+      />
+      <Link to={`/board/${boardItem.id}`}>Перейти до дошки {boardItem.title}</Link>
+    </div>
+  ))
+) : (
+  <p>Дошок немає.</p>
+)}
       </div>
     </div>
   );

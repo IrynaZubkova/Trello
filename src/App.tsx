@@ -41,9 +41,13 @@ function App(): JSX.Element {
         </header>
         {error && <div>{error}</div>} 
         <Routes>
-          <Route path="/" element={<Home board={board} update={fetchBoards} />} /> 
-          <Route path="/board/:board_id" element={<BoardPage board={board}/>} />
-        </Routes>
+  <Route path="/" element={<Home board={board} update={fetchBoards} />} />
+  <Route
+    path="/board/:board_id"
+    element={<BoardPage update={fetchBoards} />}
+  />
+</Routes>
+
       </div>
     </HashRouter>
   );

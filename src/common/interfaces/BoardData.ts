@@ -1,5 +1,5 @@
 export interface BoardData {
-  lists: IList[];  
+  lists?: IList[];  
   id: number;
     title: string;
     custom?: { backgroundColor: string };

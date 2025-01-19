@@ -42,7 +42,15 @@ const apiDeleteBoard = async (id: number): Promise<void> => {
 
 // Зміна кольору фону дошки
 
+const apiUpdateBoardBackground = async (id: number, backgroundColor: string) => {
+  try {
+    return await api.put(`${EDIT_BOARD}/${id}`, { custom: { backgroundColor } });
+  } catch (error) {
+    console.error('Помилка при зміні кольору фону дошки:', error);
+    throw error;
+  }
+};
 
 
 
-export { apiCreateBoard, apiEditBoard, apiDeleteBoard };
+export { apiCreateBoard, apiEditBoard, apiDeleteBoard, apiUpdateBoardBackground };

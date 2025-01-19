@@ -2,78 +2,86 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../../api/request';
+import { apiUpdateBoardBackground } from '../../../../api/boards';
 import EditableBoardTitle from './EditableBoardTitle';
 import EditableBoardBackground from './EditableBoardBackground';
 import './board.scss';
 import { BoardProps } from '../../../../common/interfaces/BoardProps';
-import List from '../List/List'; 
+import List from '../List/List';
 import { ICard } from '../../../../common/interfaces/ListProps';
-
-
-
 
 const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange }) => {
   if (!board) {
-    return <div>Board not found</div>; // чи будь-яка інша помилка
+    return <div>Board not found</div>;
   }
 
   const navigate = useNavigate();
   const [background, setBackground] = useState<string>(board?.custom?.backgroundColor || "#fff");
   const [lists, setLists] = useState(board?.lists || []);
-
-  //Коли компонент рендериться вперше, 
-  // background отримує значення з board?.custom?.background (якщо воно існує) або,
-  //  якщо це значення недоступне, використовує за замовчуванням "#fff"
   const [error, setError] = useState<string | null>(null);
 
-  const handleBackgroundChange = (newColor: string) => {
-    setBackground(newColor);
-    onBackgroundChange(board.id, newColor); // Оновлюємо фон через зворотний виклик
+  const handleBackgroundChange = async (newColor: string) => {
+    try {
+      setBackground(newColor); // Відображення зміни на клієнті
+      await apiUpdateBoardBackground(board.id, newColor); // Запит до сервера
+      fetchBoards(); // Оновлюємо дошки після зміни
+    } catch (error) {
+      setError('Не вдалося змінити колір фону дошки');
+      console.error('Помилка при зміні кольору:', error);
+    }
   };
   
-  const handleDeleteBoard = async (): Promise<void> => {
-    if (board) {
-      const confirmDelete = window.confirm(`Ви дійсно хочете видалити дошку "${board.title}"?`);
-      if (confirmDelete) {
-        try {
-          await api.delete(`/board/${board.id}`);
-          fetchBoards();
-        } catch (err) {
-          setError('Не вдалося видалити дошку');
-        }
+
+  const handleDeleteBoard = async (e: React.MouseEvent): Promise<void> => {
+    e.preventDefault(); // Запобігаємо переходу по Link
+    e.stopPropagation(); // Зупиняємо спливання події
+    
+    if (!board?.id) {
+      setError("Дошка не завантажена.");
+      return;
+    }
+    
+    console.log(`Deleting board with ID: ${board.id}`);
+    const confirmDelete = window.confirm(`Ви дійсно хочете видалити дошку "${board.title}"?`);
+    
+    if (confirmDelete) {
+      try {
+        await api.delete(`/board/${board.id}`);
+        fetchBoards();
+        // Якщо ми на сторінці дошки, повертаємося на головну
+        
+          navigate('/');
+       
+      } catch (err) {
+        setError('Не вдалося видалити дошку');
+        console.error('Error deleting board:', err);
       }
     }
   };
-  
-  const handleAddList = () => {
-    const newList = { 
-      id: Date.now(), // Генеруємо унікальний ідентифікатор
-      title: 'Новий список', 
-      cards: [] 
-    };
-    setLists(prevLists => [...prevLists, newList]); // Додаємо новий список до поточного стану
-  };
-  
-  const handleBoardClick = () => {
-    if (!board?.id) {
-      return; // Додано перевірку на наявність id
-    }
-    navigate(`/board/${board.id}`);
-  };
-  
 
-  //відображення дошки і контенту в ній
+  const handleAddList = (e: React.MouseEvent) => {
+    e.preventDefault(); // Запобігаємо переходу по Link
+    e.stopPropagation(); // Зупиняємо спливання події
+    
+    const newList = {
+      id: Date.now(),
+      title: 'Новий список',
+      cards: []
+    };
+    setLists(prevLists => [...prevLists, newList]);
+  };
+
+  // Видаляємо handleBoardClick, оскільки використовуємо Link
+
   return (
     <div className="board-container">
       {error && <div className="error-message">{error}</div>}
-      <div className="board" onClick={handleBoardClick}>
-        {/* Лінк тільки на саму дошку */}
+      <div className="board">
         <Link to={`/board/${board.id}`} className="board-item" style={{ backgroundColor: background }}>
-          
-          <EditableBoardTitle 
-            backgroundColor={background} 
-            board={board} 
-            fetchBoards={fetchBoards} 
+          <EditableBoardTitle
+            backgroundColor={background}
+            board={board}
+            fetchBoards={fetchBoards}
           />
         </Link>
 
@@ -84,12 +92,17 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
           fetchBoards={fetchBoards}
         />
 
-        {/* Кнопки редагування і видалення поза лінком */}
-        <button className="delete-board-button" onClick={handleDeleteBoard}>
+        <button 
+          className="delete-board-button" 
+          onClick={handleDeleteBoard}
+        >
           Видалити дошку
         </button>
 
-        <button className="add-list-button" onClick={handleAddList}>
+        <button 
+          className="add-list-button" 
+          onClick={handleAddList}
+        >
           Додати список
         </button>
 

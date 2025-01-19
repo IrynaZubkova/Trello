@@ -6,8 +6,10 @@ import './home.scss';
 import Board from './components/Board/Board';
 import { BoardData } from '../../common/interfaces/EditableBoardTitleProps';
 import { HomeProps } from '../../common/interfaces/HomeProps';
+import { apiUpdateBoardBackground } from '../../api/boards';
+import { Console } from 'console';
 
-const Home: React.FC<HomeProps> = ({ board = [], update }) => { // Ініціалізація board
+const Home: React.FC<HomeProps> = ({ board = [], update,  fetchBoards }) => { // Ініціалізація board
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [boards, setBoards] = useState<BoardData[]>(board);
 
@@ -35,13 +37,30 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => { // Ініціа�
     }
   };
 
-  const handleBackgroundChange = (boardId: number, newBackground: string) => {
-    const updatedBoards = boards.map((b) =>
-      b.id === boardId ? { ...b, custom: { backgroundColor: newBackground } } : b
+  
+const handleBackgroundChange = async (boardId: number, newBackground: string) => {
+  try {
+    await apiUpdateBoardBackground(boardId, newBackground);
+    const updatedBoards = boards.map((board) =>
+      board.id === boardId
+        ? { ...board, custom: { backgroundColor: newBackground } }
+        : board
     );
     setBoards(updatedBoards);
-    update(updatedBoards); // Оновлення дошок
-  };
+    update(updatedBoards)
+  } catch (error) {
+    console.error('Не вдалося оновити колір дошки:', error);
+  }
+};
+
+const handleBoardDelete = (boardId: number) => {
+  setBoards((prevBoards) => prevBoards.filter(board => board.id !== boardId));
+  update(boards.filter(board => board.id !== boardId)); // Оновлення дошок на вищому рівні
+};
+
+  function handleTitleChange(boardId: number, newTitle: string): void {
+   console.log('Function handleTitleChange not implemented.');
+  }
 
   return (
     <div>
@@ -59,11 +78,13 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => { // Ініціа�
   boards.map((boardItem) => (
     <div key={boardItem.id}>
       <Board
+       onBoardDelete={handleBoardDelete}
         board={boardItem}
         fetchBoards={() => update(boards)}
         onBackgroundChange={handleBackgroundChange}
-      />
-      <Link to={`/board/${boardItem.id}`}>Перейти до дошки {boardItem.title}</Link>
+        onTitleChange={handleTitleChange}  
+     />
+     
     </div>
   ))
 ) : (

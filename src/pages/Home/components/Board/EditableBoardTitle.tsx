@@ -26,6 +26,7 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
     try {
       await apiEditBoard(board.id, newTitle);
       fetchBoards();
+      board.title = newTitle;
       setIsEditing(false);
     } catch (error) {
       console.error('Помилка при оновленні дошки:', error);

@@ -7,7 +7,6 @@ import Board from './components/Board/Board';
 import { BoardData } from '../../common/interfaces/EditableBoardTitleProps';
 import { HomeProps } from '../../common/interfaces/HomeProps';
 import { apiUpdateBoardBackground } from '../../api/boards';
-import { Console } from 'console';
 
 const Home: React.FC<HomeProps> = ({ board = [], update,  fetchBoards }) => { // Ініціалізація board
   const [isModalOpen, setIsModalOpen] = useState(false);

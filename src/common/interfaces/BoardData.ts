@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 export interface BoardData {
   lists?: IList[];  
   id: number;
@@ -6,6 +7,7 @@ export interface BoardData {
   }
 
   export interface IList {
+    position: ReactNode;
     id: number;
     title: string;
     cards: ICard[]; // Масив карток у списку

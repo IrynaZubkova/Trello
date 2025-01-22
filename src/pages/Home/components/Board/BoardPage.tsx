@@ -3,12 +3,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { apiGetBoardById } from '../../../../api/boards';
 import Board from './Board';
 import { BoardData } from '../../../../common/interfaces/BoardData';
+import List from '../List/List';
+import { ICard } from '../../../../common/interfaces/ListProps';
+import {ModalForList} from '../List/ModalForList';
+import { apiAddList, apiGetLists } from '../../../../api/list';
 
 const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   const { board_id } = useParams<{ board_id: string }>();
   const [board, setBoard] = useState<BoardData | null>(null);
+   const [lists, setLists] = useState(board?.lists || []);
+   const [isModalOpen, setIsModalOpen] = useState(false);
+   const navigate = useNavigate();
   
-  const navigate = useNavigate();
 
   const fetchBoardData = async () => {
     if (!board_id) {
@@ -26,7 +32,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error(error.message); // Якщо це об'єкт помилки, ми можемо доступитись до message
+        console.error(error.message); 
       } else {
         console.error('An unknown error occurred');
       }
@@ -36,7 +42,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   const handleBoardDeleted = () => {
     console.log('Board is being deleted');
     if (update) {
-      update();  // Викликаємо без параметра
+      update();  
     }
     console.log ("novigate GO");
     navigate('/');
@@ -57,8 +63,27 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     console.log(`Changing title to: ${newTitle}`);
   };
   
+  const handleAddList = async (title: string) => {
+    if (!board) return;
+    try {
+      const newList = await apiAddList(board.id, title, lists.length + 1); // Виконання запиту
+      setLists((prevLists) => [...prevLists, newList]); // Додавання до локального стану
+    } catch (error) {
+      console.error('Помилка при додаванні списку:', error);
+      alert('Не вдалося додати список. Спробуйте ще раз.');
+    }
+  };
+
+
+  useEffect(() => {
+    if (board?.lists) {
+      setLists(board.lists); // Оновлюємо локальний стан списків
+    }
+  }, [board?.lists]);
+  
+
   if (!board) {
-    return <div>Board not found</div>;
+    return <div>   </div>;
   }
 
 
@@ -66,12 +91,37 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     <div>   
       <Board 
         board={board} 
-        onBoardDelete={handleBoardDeleted}  // Передаємо функцію видалення
+        onBoardDelete={handleBoardDeleted} 
         onBackgroundChange={handleBackgroundChange} 
         fetchBoards={update} 
         onTitleChange={handleTitleChange}  
       />
+       <button 
+                className="add-list-button" 
+                onClick={() => setIsModalOpen(true)} 
+              >
+                Додати список
+              </button>
+      
+              {board?.lists?.length ? (
+                <div>
+                {lists.map(list => (
+                  <div key={list.id}>
+                    <h3>{list.title}</h3>
+          
+                  </div>
+                ))}
+              </div>
+              ) : (
+                <div>Список порожній</div>
+              )}
+              <ModalForList
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleAddList}
+      />
     </div>
+    
   );
 };
 

@@ -35,7 +35,7 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
           aria-label="Виберіть колір фону дошки"
           onChange={(e) => setBackgroundColor(e.target.value)} // Оновлюємо стан
         />
-       <button onClick={handleColorChange}>Змінити колір</button>
+       <button onClick={handleColorChange}>Зберегти колір</button>
       </label>
     </div>
   );

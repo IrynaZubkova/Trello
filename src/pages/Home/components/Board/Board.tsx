@@ -7,8 +7,7 @@ import EditableBoardTitle from './EditableBoardTitle';
 import EditableBoardBackground from './EditableBoardBackground';
 import './board.scss';
 import { BoardProps } from '../../../../common/interfaces/BoardProps';
-import List from '../List/List';
-import { ICard } from '../../../../common/interfaces/ListProps';
+
 
 const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange }) => {
   if (!board) {
@@ -17,7 +16,6 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
 
   const navigate = useNavigate();
   const [background, setBackground] = useState<string>(board?.custom?.backgroundColor || "#fff");
-  const [lists, setLists] = useState(board?.lists || []);
   const [error, setError] = useState<string | null>(null);
 
   const handleBackgroundChange = async (newColor: string) => {
@@ -48,30 +46,13 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
       try {
         await api.delete(`/board/${board.id}`);
         fetchBoards();
-        // Якщо ми на сторінці дошки, повертаємося на головну
-        
           navigate('/');
-       
       } catch (err) {
         setError('Не вдалося видалити дошку');
         console.error('Error deleting board:', err);
       }
     }
   };
-
-  const handleAddList = (e: React.MouseEvent) => {
-    e.preventDefault(); // Запобігаємо переходу по Link
-    e.stopPropagation(); // Зупиняємо спливання події
-    
-    const newList = {
-      id: Date.now(),
-      title: 'Новий список',
-      cards: []
-    };
-    setLists(prevLists => [...prevLists, newList]);
-  };
-
-  // Видаляємо handleBoardClick, оскільки використовуємо Link
 
   return (
     <div className="board-container">
@@ -84,37 +65,18 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
             fetchBoards={fetchBoards}
           />
         </Link>
-
         <EditableBoardBackground
           boardId={board.id}
           initialBackground={background}
           onBackgroundChange={handleBackgroundChange}
           fetchBoards={fetchBoards}
         />
-
         <button 
           className="delete-board-button" 
           onClick={handleDeleteBoard}
         >
           Видалити дошку
         </button>
-
-        <button 
-          className="add-list-button" 
-          onClick={handleAddList}
-        >
-          Додати список
-        </button>
-
-        {board?.lists?.length ? (
-          <div className="lists">
-            {lists.map((list: { id: number; title: string; cards: ICard[] }) => (
-              <List key={list.id} id={list.id} title={list.title} cards={list.cards} />
-            ))}
-          </div>
-        ) : (
-          <div>Список порожній</div>
-        )}
       </div>
     </div>
   );

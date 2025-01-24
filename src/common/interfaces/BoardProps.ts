@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface BoardProps {
   board: BoardData;
   fetchBoards: () => void; // оновлення списку дошок після будь-якої зміни
@@ -15,7 +17,8 @@ export interface BoardData {
   export interface IList {
     id: number;
     title: string;
-    cards: ICard[]; // Масив карток у списку
+    cards: ICard[]; 
+    position: number;
   }
   
   export interface ICard {

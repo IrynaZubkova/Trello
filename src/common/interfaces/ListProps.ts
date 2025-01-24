@@ -1,8 +1,8 @@
 export interface ListProps {
   id: number;
   title: string;
-  // position: int;
   cards: ICard[];
+  position: number;
 }
 export interface ICard {
     id: number;

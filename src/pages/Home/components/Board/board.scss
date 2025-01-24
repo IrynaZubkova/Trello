@@ -67,3 +67,53 @@
   transform: scale(1.1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
+
+.boardPage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.boardPage .board{
+  width: 96%;
+  height: 580px;
+}
+
+.boardPage .board-item{
+  height: 480px;
+}
+.boardPage .board-title{
+  font-size: 60px;
+  color: #000000;
+}
+.boardPage .delete-board-button{
+  position: absolute; 
+  top: 550px; 
+  right: 80px; 
+  padding: 10px 20px;
+  background-color: #fd7283;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.boardPage .add-list-button{
+  position: absolute; 
+  top: 120px; 
+  left: 120px;
+  padding: 10px 20px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.lists {
+  width: 90%;
+  display: flex; /* Списки в ряд */
+  margin-top: -440px;
+  margin-right: 60px;
+  gap: 20px; /* Проміжки між списками */
+  overflow-x: auto; /* Дозволяємо горизонтальну прокрутку */
+  padding: 10px;
+  margin-left: 60px;
+}

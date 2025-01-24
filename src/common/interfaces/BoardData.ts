@@ -7,7 +7,7 @@ export interface BoardData {
   }
 
   export interface IList {
-    position: ReactNode;
+    position: number;
     id: number;
     title: string;
     cards: ICard[]; // Масив карток у списку

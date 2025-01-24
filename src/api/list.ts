@@ -10,8 +10,8 @@ export const apiAddList = async (boardId: number, listTitle: string, position: n
   return response.data;
 };
 
-export const apiGetLists = async (boardId: number) => {
-  const response = await api.get(`${GET_LISTS}/${boardId}/list`);
-  //тут ймовірно шось не так (`${GET_LISTS}/${boardId}/list`)
-  return response.data; 
-};
+// export const apiGetLists = async (boardId: number) => {
+//   const response = await api.get(`${GET_LISTS}/${boardId}/list`);
+//   //тут ймовірно шось не так (`${GET_LISTS}/${boardId}/list`)
+//   return response.data; 
+// };

@@ -1,7 +1,9 @@
 import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD, GET_BOARD } from './routes';
 import api from './request';
+import axios, { AxiosResponse } from 'axios';
+import { BoardData, IList } from '../common/interfaces/BoardProps';
 
-export const apiGetBoardById = async (id: string) => {
+export const apiGetBoardById = async (id: string): Promise<BoardData> => {
   try {
     return await api.get(`${GET_BOARD}/${id}`);
   } catch (error) {
@@ -9,6 +11,8 @@ export const apiGetBoardById = async (id: string) => {
     throw error; // кидаємо помилку, якщо щось пішло не так
   }
 };
+
+
 
 const apiCreateBoard = async (
   title: string,

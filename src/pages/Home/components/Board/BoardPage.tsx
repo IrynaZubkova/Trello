@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiGetBoardById } from '../../../../api/boards';
 import Board from './Board';
-import { BoardData } from '../../../../common/interfaces/BoardData';
+import { BoardData, IList } from '../../../../common/interfaces/BoardData';
 import List from '../List/List';
 import { ICard } from '../../../../common/interfaces/ListProps';
 import {ModalForList} from '../List/ModalForList';
-import { apiAddList, apiGetLists } from '../../../../api/list';
+import { apiAddList} from '../../../../api/list';
+import { AxiosResponse } from 'axios';
+import { ListProps } from '../../../../common/interfaces/ListProps';
 
 const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   const { board_id } = useParams<{ board_id: string }>();
@@ -24,12 +26,14 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
 
     try {
       const response = await apiGetBoardById(board_id);
-      const boardData = {
-        ...response,
-        id: Number(board_id)
-      };
-      setBoard(boardData as unknown as BoardData);
-      
+      const boardData = { ...response, id: Number(board_id) };
+      setBoard(boardData as BoardData);
+      setLists(boardData.lists || []);
+      if (Array.isArray(boardData.lists)) {
+        setLists(boardData.lists);
+      } else {
+        setLists([]); // Set an empty array if lists are not available
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message); 
@@ -64,16 +68,35 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   };
   
   const handleAddList = async (title: string) => {
-    if (!board) return;
+    if (!board) {
+      console.error('Дошка ще не завантажена!');
+      return;
+    }
     try {
-      const newList = await apiAddList(board.id, title, lists.length + 1); // Виконання запиту
-      setLists((prevLists) => [...prevLists, newList]); // Додавання до локального стану
+      const newList: IList = { id: Date.now(), title, cards: [], position: lists.length + 1 }; // Створюємо новий список
+      setLists(prevLists => [...prevLists, newList]); // Оновлюємо локальний стан списків
+      setIsModalOpen(false);
+      await apiAddList(board.id, title, lists.length + 1);
+      
+  
     } catch (error) {
       console.error('Помилка при додаванні списку:', error);
       alert('Не вдалося додати список. Спробуйте ще раз.');
     }
   };
+  
+  
+  
 
+
+  
+  useEffect(() => {
+    if (lists.length) {
+      // Логіка для синхронізації UI з новими списками
+      console.log('Новий список додано', lists);
+    }
+  }, [lists]);  // Оновлюється кожного разу, коли список змінюється
+  
 
   useEffect(() => {
     if (board?.lists) {
@@ -81,14 +104,15 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     }
   }, [board?.lists]);
   
-
+ 
+  
   if (!board) {
     return <div>   </div>;
   }
 
 
   return (
-    <div>   
+    <div className="boardPage">
       <Board 
         board={board} 
         onBoardDelete={handleBoardDeleted} 
@@ -102,15 +126,19 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
               >
                 Додати список
               </button>
-      
-              {board?.lists?.length ? (
-                <div>
-                {lists.map(list => (
-                  <div key={list.id}>
-                    <h3>{list.title}</h3>
-          
-                  </div>
-                ))}
+
+              {Array.isArray(lists) && lists.length > 0 ? (
+                <div className="lists">
+                 {lists.map((list) => (
+        list ? (
+      <List 
+          key={list.id} 
+          id={list.id} 
+          title={list.title} 
+          cards={list.cards || []} 
+          position={list.position || 0}
+        />): null
+      ))}
               </div>
               ) : (
                 <div>Список порожній</div>
@@ -121,7 +149,6 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
         onSave={handleAddList}
       />
     </div>
-    
   );
 };
 

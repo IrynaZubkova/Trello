@@ -9,7 +9,7 @@ function List({ id, title, cards: initialCards }: ListProps): React.ReactElement
   const handleAddCard = () => {
     const newCard = { id: Date.now(), title: 'Нова картка' };
     setCards([...cards, newCard]); // Додаємо картку до стану
-    // Якщо використовуєте API, можна тут надіслати POST-запит для збереження
+    
   };
 
   return (

@@ -1,6 +1,5 @@
 import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD, GET_BOARD } from './routes';
 import api from './request';
-import axios, { AxiosResponse } from 'axios';
 import { BoardData, IList } from '../common/interfaces/BoardProps';
 
 export const apiGetBoardById = async (id: string): Promise<BoardData> => {

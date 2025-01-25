@@ -6,9 +6,7 @@ import { BoardData, IList } from '../../../../common/interfaces/BoardData';
 import List from '../List/List';
 import { ICard } from '../../../../common/interfaces/ListProps';
 import {ModalForList} from '../List/ModalForList';
-import { apiAddList} from '../../../../api/list';
-import { AxiosResponse } from 'axios';
-import { ListProps } from '../../../../common/interfaces/ListProps';
+import { apiAddList, apiDeleteList} from '../../../../api/list';
 
 const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   const { board_id } = useParams<{ board_id: string }>();
@@ -73,11 +71,12 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       return;
     }
     try {
-      const newList: IList = { id: Date.now(), title, cards: [], position: lists.length + 1 }; // Створюємо новий список
+      const newList: IList = { id: Date.now(), title, position: lists.length + 1, cards: [] }; // Створюємо новий список
       setLists(prevLists => [...prevLists, newList]); // Оновлюємо локальний стан списків
+      
       setIsModalOpen(false);
       await apiAddList(board.id, title, lists.length + 1);
-      
+      fetchBoardData();
   
     } catch (error) {
       console.error('Помилка при додаванні списку:', error);
@@ -86,14 +85,10 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   };
   
   
-  
-
-
-  
   useEffect(() => {
     if (lists.length) {
       // Логіка для синхронізації UI з новими списками
-      console.log('Новий список додано', lists);
+      console.log('Список змінено', lists);
     }
   }, [lists]);  // Оновлюється кожного разу, коли список змінюється
   
@@ -105,6 +100,21 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   }, [board?.lists]);
   
  
+
+  const handleDeleteList = async (listId: number) => {
+    if (!board) {
+      console.error('Board is not loaded!');
+      return;
+    }
+
+    try {
+      await apiDeleteList(board.id, listId); // Виклик функції для видалення списку
+      setLists(prevLists => prevLists.filter((list) => list.id !== listId)); // Оновлюємо локальний стан списків
+    } catch (error) {
+      console.error('Error deleting list:', error);
+      alert('Не вдалося видалити список. Спробуйте ще раз.');
+    }
+  };
   
   if (!board) {
     return <div>   </div>;
@@ -131,17 +141,23 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
                 <div className="lists">
                  {lists.map((list) => (
         list ? (
+          <div key={list.id} className="list-item">
       <List 
           key={list.id} 
           id={list.id} 
           title={list.title} 
-          cards={list.cards || []} 
           position={list.position || 0}
-        />): null
+          cards={list.cards || []} 
+        /> 
+        <button onClick={() => handleDeleteList(list.id)}>Видалити</button>
+            </div>
+      ): null
+        
       ))}
+      
               </div>
               ) : (
-                <div>Список порожній</div>
+                <div> </div>
               )}
               <ModalForList
         isOpen={isModalOpen}

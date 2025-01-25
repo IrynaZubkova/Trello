@@ -1,5 +1,5 @@
 import api from './request';
-import { CREATE_LIST, GET_LISTS} from './routes';
+import { CREATE_LIST, DELETE_LIST} from './routes';
 
 export const apiAddList = async (boardId: number, listTitle: string, position: number) => {
   const url = `${CREATE_LIST}/${boardId}/list`; // Динамічний шлях із ID дошки
@@ -10,8 +10,11 @@ export const apiAddList = async (boardId: number, listTitle: string, position: n
   return response.data;
 };
 
-// export const apiGetLists = async (boardId: number) => {
-//   const response = await api.get(`${GET_LISTS}/${boardId}/list`);
-//   //тут ймовірно шось не так (`${GET_LISTS}/${boardId}/list`)
-//   return response.data; 
-// };
+export const apiDeleteList = async (boardId: number, listId: number): Promise<void> => {
+  try {
+    await api.delete(`${DELETE_LIST}/${boardId}/list/${listId}`);
+  } catch (error) {
+    console.error('Помилка при видаленні списку:', error);
+    throw error;
+  }
+};

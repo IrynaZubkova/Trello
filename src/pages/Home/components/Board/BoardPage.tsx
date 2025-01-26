@@ -20,7 +20,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     if (!board_id) {
       console.log("No board_id provided");
       return;
-    }
+    }else{console.log ("No board_id provided")}
 
     try {
       const response = await apiGetBoardById(board_id);
@@ -143,12 +143,14 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
         list ? (
           <div key={list.id} className="list-item">
       <List 
-          key={list.id} 
-          id={list.id} 
-          title={list.title} 
-          position={list.position || 0}
-          cards={list.cards || []} 
-        /> 
+  key={list.id} 
+  id={list.id} 
+  boardId={board.id}   
+  title={list.title} 
+  position={list.position || 0}
+  cards={list.cards || []} 
+/>
+
         <button onClick={() => handleDeleteList(list.id)}>Видалити</button>
             </div>
       ): null

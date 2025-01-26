@@ -1,11 +1,17 @@
 export interface ListProps {
   id: number;
+  boardId: number;  // Додайте це поле
   title: string;
-  cards: ICard[];
   position: number;
+  cards: ICard[];
 }
 export interface ICard {
-    id: number;
-    title: string;
+  id: number; 
+  title: string; 
+  description: string; 
+  color: string; 
+  custom: any; 
+  users: number[]; 
+  created_at: string;
   }
   

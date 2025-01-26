@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import './ModalForList.scss'; 
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (title: string) => void;
-}
+import './ModalForList.scss';
+import { ModalProps } from '../../../../common/interfaces/ModalPropsForList';
 
 export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
   const [title, setTitle] = React.useState('');
@@ -23,7 +18,7 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
     return true;
   };
 
-  const handleSave = async ()  => {
+  const handleSave = async () => {
     if (title.trim() === '') {
       alert('Назва дошки не повинна бути порожньою');
       return;
@@ -36,9 +31,10 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
       } catch (error) {
         console.error('Помилка при збереженні списку:', error);
         alert('Не вдалося додати список. Спробуйте ще раз.');
-      }}
+      }
+    }
   };
-  
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

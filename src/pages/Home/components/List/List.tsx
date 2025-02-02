@@ -1,57 +1,108 @@
-import React, { useState } from 'react';
-import { ICard } from '../../../../common/interfaces/ICard';
+import React, { useEffect, useState } from 'react';
 import './list.scss';
 import { ListProps } from '../../../../common/interfaces/ListProps';
 import ModalForCard from './ModalForCard';
-import { apiAddCard } from '../../../../api/card';
+import { apiAddCard, apiDeleteCard } from '../../../../api/card';
+import { regex } from '../../../../common/constants/regex';
 
-function List({ id, boardId, title, cards: initialCards }: ListProps): React.ReactElement {
-  const [cards, setCards] = useState<ICard[]>(initialCards);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [cardTitle, setCardTitle] = useState('');
-  const [cardDescription, setCardDescription] = useState('');
-  const [cardCustom, setCardCustom] = useState({ deadline: '' });
+function List({ id, boardId, title, cards: initialCards, update, updateTitle }: ListProps & { update: () => void; updateTitle: (id: number, newTitle: string) => void }): React.ReactElement {
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [cardTitle, setCardTitle] = useState<string>('');
+  const [cardDescription, setCardDescription] = useState<string>('');
+  const [cardCustom, setCardCustom] = useState<{ deadline: string }>({ deadline: '' });
 
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newTitle, setNewTitle] = useState<string>(title);
 
-   const handleAddCard = async () => {
+  const handleAddCard = async () => {
     try {
       const newCard = {
         title: cardTitle,
-        list_id: id, 
-        position: cards.length + 1, 
+        list_id: id,
+        position: initialCards.length + 1,
         description: cardDescription,
         custom: cardCustom,
       };
-      console.log('newCard:', newCard);
-     const response = await apiAddCard(boardId, newCard.list_id, newCard.title, newCard.position, newCard.description, newCard.custom);
 
-      
-      setCards([...cards, {
-        id: response.id, title: cardTitle,
-        description: '',
-        color: '',
-        custom: undefined,
-        users: [],
-        created_at: ''
-      }]);
-      setModalOpen(false);
-      setCardTitle('');
-      setCardDescription('');
-      setCardCustom({ deadline: '' });
-    } catch (error) {
+      console.log('Creating new card:', newCard); 
+
+      const response = await apiAddCard(
+        boardId,
+        newCard.list_id,
+        newCard.title,
+        newCard.position,
+        newCard.description,
+        newCard.custom
+      );
+        update();
+        console.log("updated!")
+        setModalOpen(false);
+        setCardTitle('');
+        setCardDescription('');
+        setCardCustom({ deadline: '' });
+         } catch (error) {
       console.error('Помилка при додаванні картки:', error);
     }
   };
 
+  const handleDeleteCard = async (cardId: number) => {
+    try {
+      await apiDeleteCard(boardId, cardId);
+      update(); // Оновлюємо список карток після видалення
+    } catch (error) {
+      console.error('Помилка при видаленні картки:', error);
+    }
+  };
+
+  const handleTitleEdit = () => setIsEditing(true);
+  const handleBlur = () => {
+    setIsEditing(false);
+    if (!newTitle.trim()) {
+      alert('Назва не може бути порожньою або складатися лише з пробілів');
+      return;
+    }
+    if (newTitle.trim() && newTitle !== title && regex.test(newTitle)) {
+      updateTitle(id, newTitle);
+    } else {
+      setNewTitle(title); 
+      if (!regex.test(newTitle)) {
+        alert('Назва містить недопустимі символи');
+      }
+    }
+  };
+  
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleBlur();
+    }
+  };
 
   return (
     <div className="list">
-      <h2>{title}</h2>
+        {isEditing ? (
+        <input
+          type="text"
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          autoFocus
+        />
+      ) : (
+        <h2 className="list-title" onClick={handleTitleEdit}>{title}</h2>
+      )}
+      <div className="card-list-container">
       <ul>
-        {cards.map((card) => (
-          <li key={card.id}>{card.title}</li>
+      {initialCards.map((card) => (
+          <li key={card.id} className="card-item">
+            <span>{card.title}</span>
+            <button className="delete-card-button" onClick={() => handleDeleteCard(card.id)}>
+             Х
+            </button>
+          </li>
         ))}
       </ul>
+      </div>
       <button className="add-card-button" onClick={() => setModalOpen(true)}>
         Додати картку
       </button>

@@ -1,13 +1,8 @@
 .list {
-  margin: 20px;
+  width: 180px;
   background-color: #da70ae;
   padding: 10px;
   border-radius: 10px;
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
 }
 
 .add-card-button {
@@ -26,4 +21,62 @@
 
 .add-card-button:hover {
   background-color: #5cebe4;
+}
+
+.delete-card-button {
+  background-color: red; /* Червоний фон */
+  color: white; /* Білий текст */
+  border: none;
+  border-radius: 50%; /* Кругла форма */
+  width: 24px; /* Ширина кнопки */
+  height: 24px; /* Висота кнопки */
+  font-size: 18px; /* Розмір шрифту для 'X' */
+  display: inline-flex;
+  justify-content: center; /* Центрування тексту по горизонталі */
+  align-items: center; /* Центрування тексту по вертикалі */
+  cursor: pointer;
+  right: -15px;
+  position: relative;
+}
+
+.delete-card-button:hover {
+  background-color: darkred; /* Темніший червоний при наведенні */
+}
+
+
+.list-title {
+  font-size: 30px; /* Ваш розмір шрифту */
+  color: #340042; /* Колір тексту */
+  margin: 0; /* Зменшити відступи навколо */
+  padding: 0; /* Зменшити паддінги */
+}
+
+.card-list-container {
+  overflow-y: auto;
+  max-height: 162px; 
+  padding-right: 10px;
+  flex-grow: 1;
+}
+.card-item {
+  background-color: #f1f1f1;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.card-list-container::-webkit-scrollbar {
+  width: 8px; /* Висота горизонтального скролбару */
+}
+
+.card-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.card-list-container::-webkit-scrollbar-thumb {
+  background: #ffc29c;
+  border-radius: 10px;
+}
+
+.card-list-container::-webkit-scrollbar-thumb:hover {
+  background: #88e2f9;
 }

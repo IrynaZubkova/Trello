@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ModalForList.scss';
 import { ModalProps } from '../../../../common/interfaces/ModalPropsForList';
+import { regex } from '../../../../common/constants/regex';
 
 export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
   const [title, setTitle] = React.useState('');
@@ -9,7 +10,6 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
   if (!isOpen) return null;
 
   const validateInput = (value: string) => {
-    const regex = /^[a-zA-Z0-9а-яА-ЯєЄіїІїґҐ\s\-_\.]+$/;
     if (!regex.test(value)) {
       setError('Назва списку містить заборонені символи.');
       return false;

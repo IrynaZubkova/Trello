@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { apiEditBoard } from '../../../../api/boards';
 import { EditableBoardTitleProps } from '../../../../common/interfaces/EditableBoardTitleProps';
-
+import { regex } from '../../../../common/constants/regex';
 
 
 const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards, backgroundColor}) => {
@@ -9,7 +9,6 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
   const [newTitle, setNewTitle] = useState<string>(board.title);
   const [error, setError] = useState<string | null>(null);
 
-  const regex = /^[a-zA-Z0-9а-яА-ЯєЄіїІїґҐ\s\-_\.]+$/;
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (!regex.test(value)) {
@@ -21,6 +20,10 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
   };
 
   const handleSave = async () => {
+    if (!newTitle.trim()) {
+      setError('Назва не може бути порожньою або складатися лише з пробілів');
+      return;
+    }
     if (error) return;
 
     try {

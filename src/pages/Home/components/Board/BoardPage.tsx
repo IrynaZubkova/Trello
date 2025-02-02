@@ -4,9 +4,9 @@ import { apiGetBoardById } from '../../../../api/boards';
 import Board from './Board';
 import { BoardData, IList } from '../../../../common/interfaces/BoardData';
 import List from '../List/List';
-import { ICard } from '../../../../common/interfaces/ListProps';
 import {ModalForList} from '../List/ModalForList';
-import { apiAddList, apiDeleteList} from '../../../../api/list';
+import { apiAddList, apiDeleteList, apiUpdateListTitle} from '../../../../api/list';
+
 
 const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   const { board_id } = useParams<{ board_id: string }>();
@@ -71,7 +71,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       return;
     }
     try {
-      const newList: IList = { id: Date.now(), title, position: lists.length + 1, cards: [] }; // Створюємо новий список
+      const newList: IList = { id: Date.now(), title, position: lists.length + 1, cards: [],  boardId: board.id  }; // Створюємо новий список
       setLists(prevLists => [...prevLists, newList]); // Оновлюємо локальний стан списків
       
       setIsModalOpen(false);
@@ -116,6 +116,26 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     }
   };
   
+  const updateListTitle = async (listId: number, newTitle: string) => {
+  if (!board) {
+    console.error("Board is not loaded!");
+    return;
+  }
+
+  try {
+    await apiUpdateListTitle(board.id, listId, newTitle); // Відправляємо запит на сервер
+    setLists(prevLists =>
+      prevLists.map(list =>
+        list.id === listId ? { ...list, title: newTitle } : list
+      )
+    ); // Оновлюємо локальний стан
+  } catch (error) {
+    console.error("Помилка при оновленні заголовка списку:", error);
+    alert("Не вдалося оновити заголовок списку. Спробуйте ще раз.");
+  }
+};
+
+  
   if (!board) {
     return <div>   </div>;
   }
@@ -142,6 +162,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
                  {lists.map((list) => (
         list ? (
           <div key={list.id} className="list-item">
+      
       <List 
   key={list.id} 
   id={list.id} 
@@ -149,8 +170,9 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   title={list.title} 
   position={list.position || 0}
   cards={list.cards || []} 
+  update={fetchBoardData}
+  updateTitle={updateListTitle} 
 />
-
         <button onClick={() => handleDeleteList(list.id)}>Видалити</button>
             </div>
       ): null

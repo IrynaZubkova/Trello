@@ -12,6 +12,7 @@ export interface BoardType {
   export interface IList {
     id: number;
     title: string;
+    boardId: number;
     cards: ICard[]; // Масив карток у списку
     position: number;
   }

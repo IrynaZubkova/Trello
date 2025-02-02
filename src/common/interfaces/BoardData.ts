@@ -10,6 +10,7 @@ export interface BoardData {
     position: number;
     id: number;
     title: string;
+    boardId: number;
     cards: ICard[]; // Масив карток у списку
   }
   

@@ -108,12 +108,35 @@
   cursor: pointer;
 }
 .lists {
-  width: 90%;
-  display: flex; /* Списки в ряд */
+  width: calc(100% - 120px); /* Враховуємо лівий і правий маргін для контейнера */
+  display: flex;
   margin-top: -440px;
-  margin-right: 60px;
-  gap: 20px; /* Проміжки між списками */
-  overflow-x: auto; /* Дозволяємо горизонтальну прокрутку */
-  padding: 10px;
-  margin-left: 60px;
+  overflow-x: auto;
+  padding: 10px 0; /* Встановлюємо padding зліва та справа */
+  white-space: nowrap;
+  position: relative;
+  margin-left: 60px; /* Додаємо відступ зліва */
+  margin-right: 60px; /* Додаємо відступ праворуч, якщо потрібно */
+}
+.list-item {
+  flex-shrink: 0; /* Це забороняє елементам зменшуватись в ширину */
+  margin-right: 70px; /* Відстань між списками */
+}
+
+.lists::-webkit-scrollbar {
+  height: 20px; /* Висота горизонтального скролбару */
+}
+
+.lists::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Колір фону для треку скролбару */
+  border-radius: 10px;
+}
+
+.lists::-webkit-scrollbar-thumb {
+  background: #ffc29c; /* Колір повзунка */
+  border-radius: 10px; /* Округлені кути повзунка */
+}
+
+.lists::-webkit-scrollbar-thumb:hover {
+  background: #88e2f9; /* Колір повзунка при наведенні */
 }

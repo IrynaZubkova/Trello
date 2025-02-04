@@ -7,7 +7,7 @@ import EditableBoardTitle from './EditableBoardTitle';
 import EditableBoardBackground from './EditableBoardBackground';
 import './board.scss';
 import { BoardProps } from '../../../../common/interfaces/BoardProps';
-
+import { toast } from 'react-toastify';
 
 const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange }) => {
   if (!board) {
@@ -20,12 +20,14 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
 
   const handleBackgroundChange = async (newColor: string) => {
     try {
-      setBackground(newColor); // Відображення зміни на клієнті
+      setBackground(newColor);
       await apiUpdateBoardBackground(board.id, newColor); // Запит до сервера
-      fetchBoards(); // Оновлюємо дошки після зміни
+      fetchBoards(); 
+      toast.success('Колір фону дошки успішно змінено');
     } catch (error) {
       setError('Не вдалося змінити колір фону дошки');
       console.error('Помилка при зміні кольору:', error);
+      toast.error('Не вдалося змінити колір фону дошки');
     }
   };
   
@@ -47,9 +49,11 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
         await api.delete(`/board/${board.id}`);
         fetchBoards();
           navigate('/');
+          toast.success('Дошку успішно видалено');
       } catch (err) {
         setError('Не вдалося видалити дошку');
         console.error('Error deleting board:', err);
+        toast.error('Не вдалося видалити дошку');
       }
     }
   };

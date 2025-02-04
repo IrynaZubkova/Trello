@@ -26,5 +26,5 @@ export interface BoardData {
 export interface HomeProps {
   board: BoardData[]; // Пропс для дошок
   update: (boards: BoardData[]) => void; // Функція для оновлення дошок
-  fetchBoards: () => void;
+  // fetchBoards: () => void;
 }

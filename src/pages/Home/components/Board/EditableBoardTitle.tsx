@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { apiEditBoard } from '../../../../api/boards';
 import { EditableBoardTitleProps } from '../../../../common/interfaces/EditableBoardTitleProps';
 import { regex } from '../../../../common/constants/regex';
-
+import { toast } from 'react-toastify'; 
 
 const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards, backgroundColor}) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -12,7 +12,9 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (!regex.test(value)) {
-      setError('Назва дошки містить недопустимі символи');
+      setError('');
+      toast.error('Назва дошки містить недопустимі символи'); 
+     
     } else {
       setError(null);
     }
@@ -21,7 +23,7 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
 
   const handleSave = async () => {
     if (!newTitle.trim()) {
-      setError('Назва не може бути порожньою або складатися лише з пробілів');
+      toast.error('Назва не може бути порожньою або складатися лише з пробілів'); 
       return;
     }
     if (error) return;
@@ -31,8 +33,10 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
       fetchBoards();
       board.title = newTitle;
       setIsEditing(false);
+      toast.success('Назву дошки оновлено успішно'); 
     } catch (error) {
       console.error('Помилка при оновленні дошки:', error);
+      toast.error('Помилка при оновленні дошки');
     }
   };
 

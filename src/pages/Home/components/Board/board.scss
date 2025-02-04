@@ -5,8 +5,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-wrap: wrap; /* дозволяє елементам переходити на новий рядок */
-  justify-content: space-between; /* вирівнює дошки по горизонталі з проміжками */
+  flex-wrap: wrap; 
+  justify-content: space-between; 
   gap: 20px;
   margin-top: 20px;
 }
@@ -18,7 +18,6 @@
   min-width: 275px;
 }
 
-// кнопка видалення
 .delete-board-button {
   background-color: rgb(255, 107, 107);
   color: white;
@@ -41,26 +40,26 @@
   font-size: 25px;
 }
 .editable-board-background input[type='color'] {
-  appearance: none; /* Прибираємо стандартний вигляд */
-  -webkit-appearance: none; /* Для браузерів на базі WebKit */
+  appearance: none; 
+  -webkit-appearance: none;
   cursor: pointer;
   width: 20px;
   height: 20px;
   border: none;
-  border-radius: 50%; /* Створюємо коло */
-  background-color: currentColor; /* Відображає вибраний колір */
+  border-radius: 50%;
+  background-color: currentColor; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .editable-board-background input[type='color']::-webkit-color-swatch-wrapper {
   padding: 0;
-  border-radius: 50%; /* Для внутрішнього кола */
+  border-radius: 50%; 
 }
 
 .editable-board-background input[type='color']::-webkit-color-swatch {
   border: none;
-  border-radius: 50%; /* Коло для вибраного кольору */
+  border-radius: 50%; 
 }
 
 .editable-board-background input[type='color']:hover {
@@ -108,35 +107,41 @@
   cursor: pointer;
 }
 .lists {
-  width: calc(100% - 120px); /* Враховуємо лівий і правий маргін для контейнера */
+  width: calc(100% - 120px); 
   display: flex;
   margin-top: -440px;
   overflow-x: auto;
-  padding: 10px 0; /* Встановлюємо padding зліва та справа */
+  padding: 10px 0;
   white-space: nowrap;
   position: relative;
-  margin-left: 60px; /* Додаємо відступ зліва */
-  margin-right: 60px; /* Додаємо відступ праворуч, якщо потрібно */
+  margin-left: 60px;
+  margin-right: 60px; 
 }
 .list-item {
-  flex-shrink: 0; /* Це забороняє елементам зменшуватись в ширину */
-  margin-right: 70px; /* Відстань між списками */
+  flex-shrink: 0;
+  margin-right: 70px; 
 }
 
 .lists::-webkit-scrollbar {
-  height: 20px; /* Висота горизонтального скролбару */
+  height: 20px; 
 }
 
 .lists::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Колір фону для треку скролбару */
+  background: #f1f1f1; 
   border-radius: 10px;
 }
 
 .lists::-webkit-scrollbar-thumb {
-  background: #ffc29c; /* Колір повзунка */
-  border-radius: 10px; /* Округлені кути повзунка */
+  background: #ffc29c; 
+  border-radius: 10px; 
 }
 
 .lists::-webkit-scrollbar-thumb:hover {
-  background: #88e2f9; /* Колір повзунка при наведенні */
+  background: #88e2f9; 
+}
+.progress-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }

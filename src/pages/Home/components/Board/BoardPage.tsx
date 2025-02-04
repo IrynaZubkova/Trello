@@ -6,13 +6,16 @@ import { BoardData, IList } from '../../../../common/interfaces/BoardData';
 import List from '../List/List';
 import {ModalForList} from '../List/ModalForList';
 import { apiAddList, apiDeleteList, apiUpdateListTitle} from '../../../../api/list';
-
+import ProgressBar from '@ramonak/react-progress-bar';
+import { toast } from 'react-toastify';
 
 const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   const { board_id } = useParams<{ board_id: string }>();
   const [board, setBoard] = useState<BoardData | null>(null);
    const [lists, setLists] = useState(board?.lists || []);
    const [isModalOpen, setIsModalOpen] = useState(false);
+   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
    const navigate = useNavigate();
   
 
@@ -21,12 +24,13 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       console.log("No board_id provided");
       return;
     }else{console.log ("No board_id provided")}
-
+    setProgress(60);
     try {
       const response = await apiGetBoardById(board_id);
       const boardData = { ...response, id: Number(board_id) };
       setBoard(boardData as BoardData);
       setLists(boardData.lists || []);
+      setProgress(100);
       if (Array.isArray(boardData.lists)) {
         setLists(boardData.lists);
       } else {
@@ -35,9 +39,13 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message); 
+        toast.error('Помилка при завантаженні дошки');
       } else {
         console.error('An unknown error occurred');
+        toast.error('Сталася непередбачена помилка');
       }
+    }finally {
+      setTimeout(() => setLoading(false), 500);
     }
   };
 
@@ -47,6 +55,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       update();  
     }
     console.log ("novigate GO");
+    toast.success('Дошку успішно видалено');
     navigate('/');
   };
   
@@ -77,10 +86,10 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       setIsModalOpen(false);
       await apiAddList(board.id, title, lists.length + 1);
       fetchBoardData();
-  
+      toast.success('Список успішно додано');
     } catch (error) {
       console.error('Помилка при додаванні списку:', error);
-      alert('Не вдалося додати список. Спробуйте ще раз.');
+      toast.error('Не вдалося додати список. Спробуйте ще раз.');
     }
   };
   
@@ -110,9 +119,10 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     try {
       await apiDeleteList(board.id, listId); // Виклик функції для видалення списку
       setLists(prevLists => prevLists.filter((list) => list.id !== listId)); // Оновлюємо локальний стан списків
+      toast.success('Список успішно видалено');
     } catch (error) {
       console.error('Error deleting list:', error);
-      alert('Не вдалося видалити список. Спробуйте ще раз.');
+      toast.error('Не вдалося видалити список. Спробуйте ще раз.');
     }
   };
   
@@ -128,10 +138,11 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       prevLists.map(list =>
         list.id === listId ? { ...list, title: newTitle } : list
       )
-    ); // Оновлюємо локальний стан
+    ); 
+    toast.success('Заголовок списку успішно оновлено');
   } catch (error) {
     console.error("Помилка при оновленні заголовка списку:", error);
-    alert("Не вдалося оновити заголовок списку. Спробуйте ще раз.");
+    toast.error("Не вдалося оновити заголовок списку.");
   }
 };
 
@@ -143,6 +154,9 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
 
   return (
     <div className="boardPage">
+       <div className="progress-container">
+        {loading && <ProgressBar completed={progress} bgColor="blue" height="10px" />}
+        </div>
       <Board 
         board={board} 
         onBoardDelete={handleBoardDeleted} 

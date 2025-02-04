@@ -4,6 +4,7 @@ import { ListProps } from '../../../../common/interfaces/ListProps';
 import ModalForCard from './ModalForCard';
 import { apiAddCard, apiDeleteCard } from '../../../../api/card';
 import { regex } from '../../../../common/constants/regex';
+import { toast } from 'react-toastify'; 
 
 function List({ id, boardId, title, cards: initialCards, update, updateTitle }: ListProps & { update: () => void; updateTitle: (id: number, newTitle: string) => void }): React.ReactElement {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
@@ -40,17 +41,21 @@ function List({ id, boardId, title, cards: initialCards, update, updateTitle }: 
         setCardTitle('');
         setCardDescription('');
         setCardCustom({ deadline: '' });
-         } catch (error) {
+        toast.success('Картку успішно додано!');   
+      } catch (error) {
       console.error('Помилка при додаванні картки:', error);
+      toast.error('Сталася помилка при додаванні картки');
     }
   };
 
   const handleDeleteCard = async (cardId: number) => {
     try {
       await apiDeleteCard(boardId, cardId);
-      update(); // Оновлюємо список карток після видалення
+      update(); 
+      toast.success('Картку успішно видалено!');
     } catch (error) {
       console.error('Помилка при видаленні картки:', error);
+      toast.error('Сталася помилка при видаленні картки');
     }
   };
 
@@ -58,7 +63,7 @@ function List({ id, boardId, title, cards: initialCards, update, updateTitle }: 
   const handleBlur = () => {
     setIsEditing(false);
     if (!newTitle.trim()) {
-      alert('Назва не може бути порожньою або складатися лише з пробілів');
+      toast.error('Назва не може бути порожньою або складатися лише з пробілів');
       return;
     }
     if (newTitle.trim() && newTitle !== title && regex.test(newTitle)) {
@@ -66,7 +71,7 @@ function List({ id, boardId, title, cards: initialCards, update, updateTitle }: 
     } else {
       setNewTitle(title); 
       if (!regex.test(newTitle)) {
-        alert('Назва містить недопустимі символи');
+        toast.error('Назва містить недопустимі символи'); 
       }
     }
   };

@@ -24,31 +24,31 @@
 }
 
 .delete-card-button {
-  background-color: red; /* Червоний фон */
-  color: white; /* Білий текст */
+  background-color: red;
+  color: white; 
   border: none;
-  border-radius: 50%; /* Кругла форма */
-  width: 24px; /* Ширина кнопки */
-  height: 24px; /* Висота кнопки */
-  font-size: 18px; /* Розмір шрифту для 'X' */
+  border-radius: 50%; 
+  width: 24px; 
+  height: 24px; 
+  font-size: 18px; 
   display: inline-flex;
-  justify-content: center; /* Центрування тексту по горизонталі */
-  align-items: center; /* Центрування тексту по вертикалі */
+  justify-content: center; 
+  align-items: center;
   cursor: pointer;
   right: -15px;
   position: relative;
 }
 
 .delete-card-button:hover {
-  background-color: darkred; /* Темніший червоний при наведенні */
+  background-color: darkred;
 }
 
 
 .list-title {
-  font-size: 30px; /* Ваш розмір шрифту */
-  color: #340042; /* Колір тексту */
-  margin: 0; /* Зменшити відступи навколо */
-  padding: 0; /* Зменшити паддінги */
+  font-size: 30px; 
+  color: #340042; 
+  margin: 0;
+  padding: 0; 
 }
 
 .card-list-container {
@@ -64,7 +64,7 @@
 }
 
 .card-list-container::-webkit-scrollbar {
-  width: 8px; /* Висота горизонтального скролбару */
+  width: 8px; 
 }
 
 .card-list-container::-webkit-scrollbar-track {

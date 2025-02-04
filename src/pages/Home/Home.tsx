@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Modal from './components/Modal/Modal';
 import { apiCreateBoard } from '../../api/boards';
 import './home.scss';
@@ -7,13 +6,14 @@ import Board from './components/Board/Board';
 import { BoardData } from '../../common/interfaces/EditableBoardTitleProps';
 import { HomeProps } from '../../common/interfaces/HomeProps';
 import { apiUpdateBoardBackground } from '../../api/boards';
+import { toast } from 'react-toastify';
 
-const Home: React.FC<HomeProps> = ({ board = [], update,  fetchBoards }) => { // Ініціалізація board
+const Home: React.FC<HomeProps> = ({ board = [], update}) => { 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [boards, setBoards] = useState<BoardData[]>(board);
 
   useEffect(() => {
-    setBoards(board); // Оновлюємо board з пропсів
+    setBoards(board); 
   }, [board]);
 
   const handleBoardCreated = async (newBoardTitle: string, newBoardColor: string) => {
@@ -29,10 +29,12 @@ const Home: React.FC<HomeProps> = ({ board = [], update,  fetchBoards }) => { //
         lists: [] 
       }];
       setBoards(updatedBoards);
-      update(updatedBoards); // Оновлюємо дошки
+      update(updatedBoards); 
       setIsModalOpen(false);
+      toast.success('Дошку успішно створено');
     } catch (error) {
       console.error('Помилка при створенні дошки:', error);
+      toast.error('Не вдалося створити дошку');
     }
   };
 
@@ -47,14 +49,17 @@ const handleBackgroundChange = async (boardId: number, newBackground: string) =>
     );
     setBoards(updatedBoards);
     update(updatedBoards)
+    toast.success('Колір дошки оновлено');
   } catch (error) {
     console.error('Не вдалося оновити колір дошки:', error);
+    toast.error('Не вдалося оновити колір дошки'); 
   }
 };
 
 const handleBoardDelete = (boardId: number) => {
   setBoards((prevBoards) => prevBoards.filter(board => board.id !== boardId));
-  update(boards.filter(board => board.id !== boardId)); // Оновлення дошок на вищому рівні
+  update(boards.filter(board => board.id !== boardId)); 
+  toast.success('Дошку видалено');
 };
 
   function handleTitleChange(boardId: number, newTitle: string): void {

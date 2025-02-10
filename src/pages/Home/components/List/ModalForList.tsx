@@ -25,9 +25,9 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
     }
     if (validateInput(title)) {
       try {
-        await onSave(title); // Виклик функції з `BoardPage`
-        setTitle(''); // Очищення поля
-        onClose(); // Закриття модального вікна
+        await onSave(title);
+        setTitle(''); 
+        onClose(); 
       } catch (error) {
         console.error('Помилка при збереженні списку:', error);
         alert('Не вдалося додати список. Спробуйте ще раз.');
@@ -35,11 +35,10 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
     }
   };
 
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTitle(value);
-    validateInput(value); // Перевіряємо під час введення
+    validateInput(value); 
   };
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -61,7 +60,5 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
     </div>
   );
 };
-
-//якщо бланк, додати перевірку на зміну тайтлу пробілів
 
 export default ModalForList;

@@ -7,11 +7,9 @@ export const apiGetBoardById = async (id: string): Promise<BoardData> => {
     return await api.get(`${GET_BOARD}/${id}`);
   } catch (error) {
     console.error('Помилка при отриманні дошrb:', error);
-    throw error; // кидаємо помилку, якщо щось пішло не так
+    throw error; 
   }
 };
-
-
 
 const apiCreateBoard = async (
   title: string,
@@ -33,7 +31,6 @@ const apiEditBoard = async function(id: number, title: string) {
   }
 };
 
-// Видалення дошки
 const apiDeleteBoard = async (id: number): Promise<void> => {
   try {
     await api.delete(`${DELETE_BOARD}/${id}`);
@@ -43,8 +40,6 @@ const apiDeleteBoard = async (id: number): Promise<void> => {
   }
 };
 
-// Зміна кольору фону дошки
-
 const apiUpdateBoardBackground = async (id: number, backgroundColor: string) => {
   try {
     return await api.put(`${EDIT_BOARD}/${id}`, { custom: { backgroundColor } });
@@ -53,7 +48,5 @@ const apiUpdateBoardBackground = async (id: number, backgroundColor: string) => 
     throw error;
   }
 };
-
-
 
 export { apiCreateBoard, apiEditBoard, apiDeleteBoard, apiUpdateBoardBackground };

@@ -1,20 +1,20 @@
 import React from 'react';
-import './Modal.scss'; // Стилі для модального вікна
+import './Modal.scss'; 
 import {ModalProps} from '../../../../common/interfaces/ModalProps';
-
+import { toast } from 'react-toastify';
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
   const [title, setTitle] = React.useState('');
-  const [color, setColor] = React.useState('#ffffff'); // Початковий колір (білий)
+  const [color, setColor] = React.useState('#ffffff');
 
   const handleCreateClick = () => {
     if (title.trim() === '') {
-      alert('Назва дошки не повинна бути порожньою');
+      toast.error('Назва дошки не повинна бути порожньою');
       return;
     }
     const regex = /^[a-zA-Z0-9а-яА-ЯєЄіїІїґҐ\s\-_\.]+$/;
     if (!regex.test(title)) {
-      alert('Назва дошки містить недопустимі символи');
+      toast.error('Назва дошки містить недопустимі символи');
       return;
     }
     onCreate(title, color); 
@@ -24,7 +24,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
 
   if (!isOpen) return null;
 
-  //відображення модального вікна:
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -40,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
           <input
             type="color"
             value={color}
-            onChange={(e) => setColor(e.target.value)} // Змінюємо колір
+            onChange={(e) => setColor(e.target.value)}
           />
         </label>
         <button onClick={handleCreateClick}>Додати</button>

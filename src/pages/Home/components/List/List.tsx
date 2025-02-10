@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './list.scss';
 import { ListProps } from '../../../../common/interfaces/ListProps';
 import ModalForCard from './ModalForCard';

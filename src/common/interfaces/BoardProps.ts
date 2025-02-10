@@ -1,16 +1,16 @@
-import { ReactNode } from "react";
-
 export interface BoardProps {
   board: BoardData;
-  fetchBoards: () => void; // оновлення списку дошок після будь-якої зміни
-  onBackgroundChange: (boardId: number, newBackground: string) => void;
+  fetchBoards: () => void; 
+  onBackgroundChange: (boardId: number, newBackground: string, newBackgroundImage: string) => void;
   onTitleChange: (boardId: number, newTitle: string) => void;
   onBoardDelete?: (boardId: number) => void; 
 }
 export interface BoardData {
     id: number;
     title: string;
-    custom?: { backgroundColor: string };
+    custom?: { 
+      backgroundColor?: string;
+      backgroundImage?: string; };
     lists?: IList[];
   }
 

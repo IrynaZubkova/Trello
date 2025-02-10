@@ -19,8 +19,6 @@ function App(): JSX.Element {
     try {
       setLoading(true); 
       setProgress(10);
-      // const response = await api.get('/wrong-board-url', {
-
       const response = await api.get('/board', {
         onDownloadProgress: (progressEvent) => {
           if (progressEvent.total) {
@@ -33,6 +31,7 @@ function App(): JSX.Element {
       });
       if ('boards' in response && Array.isArray(response.boards)) {
         setBoards(response.boards);
+        console.log( 'response', response, 'response.boards', response.boards)
       } else {
         console.error('Invalid API response format:', response);
       }
@@ -59,7 +58,7 @@ function App(): JSX.Element {
   };
   
   useEffect(() => {
-    fetchBoards(); // Викликаємо функцію для отримання дошок
+    fetchBoards();
   }, []);
 
   return (

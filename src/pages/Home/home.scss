@@ -1,16 +1,16 @@
 .Content {
   display: flex;
-  flex-wrap: wrap; /* Дошки будуть переноситися на новий рядок, якщо не поміщаються */
-  gap: 20px; /* Відступи між дошками */
-  margin-top: 20px; /* Відступ зверху для більшого простору */
+  flex-wrap: wrap; 
+  gap: 20px; 
+  margin-top: 20px; 
   justify-content: space-around;
 }
 
 .board-list-title {
-  font-size: 28px; /* Розмір шрифта */
-  color: #121279; /* Колір тексту */
-  text-align: center; /* Вирівнювання тексту по центру */
-  font-family: 'Caveat', cursive; /* Шрифт */
+  font-size: 28px; 
+  color: #121279; 
+  text-align: center; 
+  font-family: 'Caveat', cursive; 
 }
 
 .add-board-button {
@@ -32,6 +32,7 @@
 
 .board-item {
   // background-color: #f9f9f9;
+  background: none !important;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
@@ -46,7 +47,7 @@
 
 .board-title {
   font-size: 22px;
-  color: #5cebe4;
+  color: #091c1b;
   cursor: pointer;
   transition: color 0.3s;
   margin-bottom: 80px;

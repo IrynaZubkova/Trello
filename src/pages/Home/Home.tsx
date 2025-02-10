@@ -21,11 +21,14 @@ const Home: React.FC<HomeProps> = ({ board = [], update}) => {
       console.log('Створюємо дошку з назвою:', newBoardTitle, 'та кольором:', newBoardColor);
       const newBoard = await apiCreateBoard(newBoardTitle, { backgroundColor: newBoardColor });
       console.log('Створена дошка:', newBoard);
-
+  
       const updatedBoards = [...boards, {
         id: newBoard.id,
         title: newBoardTitle,
-        custom: { backgroundColor: newBoardColor },
+        custom: { 
+          backgroundColor: newBoardColor,
+          backgroundImage: ''  // Додаємо властивість backgroundImage
+        },
         lists: [] 
       }];
       setBoards(updatedBoards);
@@ -37,11 +40,12 @@ const Home: React.FC<HomeProps> = ({ board = [], update}) => {
       toast.error('Не вдалося створити дошку');
     }
   };
+  
 
   
-const handleBackgroundChange = async (boardId: number, newBackground: string) => {
+const handleBackgroundChange = async (boardId: number, newBackground: string, newBackgroundImage: string) => {
   try {
-    await apiUpdateBoardBackground(boardId, newBackground);
+    await apiUpdateBoardBackground(boardId, newBackground, );
     const updatedBoards = boards.map((board) =>
       board.id === boardId
         ? { ...board, custom: { backgroundColor: newBackground } }

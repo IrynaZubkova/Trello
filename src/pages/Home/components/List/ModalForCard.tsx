@@ -15,12 +15,12 @@ const ModalForCard: React.FC<ModalProps> = ({
     setCardCustom,
   }) => {
     const handleSubmit = () => {
-      if (cardTitle.trim()) { // Перевірка на порожню назву
+      if (cardTitle.trim()) { 
         onSave(cardTitle, cardDescription, cardCustom);
-        setCardTitle(''); // Очищаємо поле
-        setCardDescription(''); // Очищаємо опис
-        setCardCustom({}); // Очищаємо custom
-        onClose(); // Закриваємо модалку
+        setCardTitle(''); 
+        setCardDescription(''); 
+        setCardCustom({});
+        onClose(); 
       } else {
         alert('Будь ласка, введіть назву картки');
       }

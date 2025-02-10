@@ -1,6 +1,6 @@
 export interface ListProps {
   id: number;
-  boardId: number;  // Додайте це поле
+  boardId: number;  
   title: string;
   position: number;
   cards: ICard[];

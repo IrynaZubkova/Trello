@@ -1,7 +1,9 @@
 export interface BoardData {
     id: number;
     title: string;
-    custom?: { backgroundColor: string };
+    custom?: { 
+      backgroundColor?: string;
+      backgroundImage?: string; };
     lists?: IList[];
   }
 
@@ -9,7 +11,7 @@ export interface BoardData {
     id: number;
     title: string;
     boardId: number;
-    cards: ICard[]; // Масив карток у списку
+    cards: ICard[]; 
     position: number;
   }
 
@@ -24,7 +26,7 @@ export interface BoardData {
   }
 
 export interface HomeProps {
-  board: BoardData[]; // Пропс для дошок
-  update: (boards: BoardData[]) => void; // Функція для оновлення дошок
+  board: BoardData[]; 
+  update: (boards: BoardData[]) => void;
   // fetchBoards: () => void;
 }

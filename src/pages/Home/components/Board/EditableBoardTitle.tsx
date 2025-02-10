@@ -47,8 +47,7 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
   };
 
   const handleBackgroundChange = () => {
-    // Приклад функції для зміни фону
-    const newColor = 'red'; // Замість цього ви можете отримати колір з іншого джерела (наприклад, через input або picker)
+    // const newColor = 'red'; 
     handleBackgroundChange();
   };
 

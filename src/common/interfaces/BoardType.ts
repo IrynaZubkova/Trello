@@ -8,7 +8,7 @@ export interface BoardType {
     id: number;
     title: string;
     boardId: number;
-    cards: ICard[]; // Масив карток у списку
+    cards: ICard[]; 
     position: number;
   }
   

@@ -5,7 +5,9 @@ export interface CreateBoardProps {
 export interface BoardType {
     id: number;
     title: string;
-    custom?: { backgroundColor: string };
+    custom?: { 
+      backgroundColor?: string;
+      backgroundImage?: string; };
     lists: IList[];
   }
 
@@ -13,7 +15,7 @@ export interface BoardType {
     id: number;
     title: string;
     boardId: number;
-    cards: ICard[]; // Масив карток у списку
+    cards: ICard[]; 
     position: number;
   }
   

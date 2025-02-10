@@ -16,25 +16,27 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
 
   const navigate = useNavigate();
   const [background, setBackground] = useState<string>(board?.custom?.backgroundColor || "#fff");
+  const [backgroundImage, setBackgroundImage] = useState<string>(board?.custom?.backgroundImage || '');
   const [error, setError] = useState<string | null>(null);
 
-  const handleBackgroundChange = async (newColor: string) => {
+  const handleBackgroundChange = async (newBackground: string) => {
     try {
-      setBackground(newColor);
-      await apiUpdateBoardBackground(board.id, newColor); // Запит до сервера
+      setBackground(newBackground);
+      setBackgroundImage(newBackground);  // Оновлюємо фон зображення
+      await apiUpdateBoardBackground(board.id, newBackground); 
       fetchBoards(); 
-      toast.success('Колір фону дошки успішно змінено');
+      toast.success('Фон дошки успішно змінено');
     } catch (error) {
-      setError('Не вдалося змінити колір фону дошки');
-      console.error('Помилка при зміні кольору:', error);
-      toast.error('Не вдалося змінити колір фону дошки');
+      setError('Не вдалося змінити фон дошки');
+      console.error('Помилка при зміні фону:', error);
+      toast.error('Не вдалося змінити фон дошки');
     }
   };
   
 
   const handleDeleteBoard = async (e: React.MouseEvent): Promise<void> => {
-    e.preventDefault(); // Запобігаємо переходу по Link
-    e.stopPropagation(); // Зупиняємо спливання події
+    e.preventDefault(); 
+    e.stopPropagation(); 
     
     if (!board?.id) {
       setError("Дошка не завантажена.");
@@ -61,8 +63,15 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
   return (
     <div className="board-container">
       {error && <div className="error-message">{error}</div>}
-      <div className="board">
-        <Link to={`/board/${board.id}`} className="board-item" style={{ backgroundColor: background }}>
+      <div className="board" 
+      style={{
+        backgroundColor: background,  
+        backgroundImage: background ? `url(${background})` : undefined,  
+        backgroundSize: 'cover',  
+        backgroundPosition: 'center',  
+      }}
+      >
+        <Link to={`/board/${board.id}`} className="board-item" >
           <EditableBoardTitle
             backgroundColor={background}
             board={board}
@@ -72,6 +81,7 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
         <EditableBoardBackground
           boardId={board.id}
           initialBackground={background}
+          initialBackgroundImage={backgroundImage} 
           onBackgroundChange={handleBackgroundChange}
           fetchBoards={fetchBoards}
         />

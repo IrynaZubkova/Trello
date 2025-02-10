@@ -6,7 +6,9 @@ export interface EditableBoardTitleProps {
 export interface BoardData {
     id: number;
     title: string;
-    custom?: { backgroundColor: string };
+    custom?: { 
+      backgroundColor?: string;
+      backgroundImage?: string; };
   lists?: IList[];
     }
   

@@ -1,6 +1,8 @@
 export interface EditableBoardBackgroundProps {
     boardId: number;
     initialBackground: string;
-    onBackgroundChange: (color: string) => void; 
+    initialBackgroundImage: string; 
+    onBackgroundChange: (background: string, type: 'color' | 'image') => void; 
     fetchBoards: () => void;
+    style?: React.CSSProperties;
   }

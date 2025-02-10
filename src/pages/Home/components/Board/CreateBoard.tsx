@@ -4,11 +4,10 @@ import { CreateBoardProps, BoardType } from '../../../../common/interfaces/Creat
 
 const CreateBoard: React.FC<CreateBoardProps> = ({ onBoardCreated }) => {
   const [title, setTitle] = useState('');
-  const [color, setColor] = useState('#ffffff'); // Початковий колір
+  const [color, setColor] = useState('#ffffff');
   const [error, setError] = useState<string | null>(null);
 
   const handleCreateBoard = async () => {
-    // Валідація введення
     if (!title.trim()) {
       setError('Назва дошки не повинна бути порожньою');
       return;
@@ -16,14 +15,11 @@ const CreateBoard: React.FC<CreateBoardProps> = ({ onBoardCreated }) => {
 
     try {
       const response = await api.post('/boards', { title, backgroundColor: color });
-// const [backgroundColor, setBackgroundColor] = useState<string>(initialBackground);
         const newBoard: BoardType = response.data;
-        // Передаємо нову дошку до батьківського компонента
         onBoardCreated(newBoard);
-        // Скидаємо стан після успішного створення
         setTitle('');
-        setColor('#ffffff'); // Повертаємо стандартний колір
-        setError(null); // Скидаємо помилку
+        setColor('#ffffff'); 
+        setError(null); 
       
     } catch (err) {
       console.error(err);

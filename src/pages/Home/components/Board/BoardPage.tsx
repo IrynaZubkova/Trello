@@ -81,7 +81,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     }
     try {
       const newList: IList = { id: Date.now(), title, position: lists.length + 1, cards: [],  boardId: board.id  }; // Створюємо новий список
-      setLists(prevLists => [...prevLists, newList]); // Оновлюємо локальний стан списків
+      setLists(prevLists => [...prevLists, newList]);
       
       setIsModalOpen(false);
       await apiAddList(board.id, title, lists.length + 1);
@@ -96,15 +96,14 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   
   useEffect(() => {
     if (lists.length) {
-      // Логіка для синхронізації UI з новими списками
       console.log('Список змінено', lists);
     }
-  }, [lists]);  // Оновлюється кожного разу, коли список змінюється
+  }, [lists]); 
   
 
   useEffect(() => {
     if (board?.lists) {
-      setLists(board.lists); // Оновлюємо локальний стан списків
+      setLists(board.lists); 
     }
   }, [board?.lists]);
   
@@ -117,8 +116,8 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     }
 
     try {
-      await apiDeleteList(board.id, listId); // Виклик функції для видалення списку
-      setLists(prevLists => prevLists.filter((list) => list.id !== listId)); // Оновлюємо локальний стан списків
+      await apiDeleteList(board.id, listId); 
+      setLists(prevLists => prevLists.filter((list) => list.id !== listId)); 
       toast.success('Список успішно видалено');
     } catch (error) {
       console.error('Error deleting list:', error);
@@ -133,7 +132,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   }
 
   try {
-    await apiUpdateListTitle(board.id, listId, newTitle); // Відправляємо запит на сервер
+    await apiUpdateListTitle(board.id, listId, newTitle);
     setLists(prevLists =>
       prevLists.map(list =>
         list.id === listId ? { ...list, title: newTitle } : list

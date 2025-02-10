@@ -1,9 +1,10 @@
-import { ReactNode } from 'react';
 export interface BoardData {
   lists?: IList[];  
   id: number;
     title: string;
-    custom?: { backgroundColor: string };
+    custom?: { 
+      backgroundColor?: string;
+      backgroundImage?: string; };
   }
 
   export interface IList {
@@ -11,7 +12,7 @@ export interface BoardData {
     id: number;
     title: string;
     boardId: number;
-    cards: ICard[]; // Масив карток у списку
+    cards: ICard[]; 
   }
   
   export interface ICard {

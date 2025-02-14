@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './ModalForList.scss';
 import { ModalProps } from '../../../../common/interfaces/ModalPropsForList';
 import { regex } from '../../../../common/constants/regex';
+import { toast } from 'react-toastify';
 
 export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
   const [title, setTitle] = React.useState('');
@@ -10,8 +11,13 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
   if (!isOpen) return null;
 
   const validateInput = (value: string) => {
-    if (!regex.test(value)) {
-      setError('Назва списку містить заборонені символи.');
+    if (value.trim() === '') { 
+      toast.error('Назва списку не повинна бути порожньою');
+      return false;
+    }
+  
+    if (!regex.test(value)) { 
+      toast.error('Назва списку містить заборонені символи.');
       return false;
     }
     setError('');
@@ -20,7 +26,6 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
 
   const handleSave = async () => {
     if (title.trim() === '') {
-      alert('Назва дошки не повинна бути порожньою');
       return;
     }
     if (validateInput(title)) {
@@ -29,9 +34,7 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
         setTitle(''); 
         onClose(); 
       } catch (error) {
-        console.error('Помилка при збереженні списку:', error);
-        alert('Не вдалося додати список. Спробуйте ще раз.');
-      }
+        toast.error('Не вдалося додати список. Спробуйте ще раз.');  }
     }
   };
 

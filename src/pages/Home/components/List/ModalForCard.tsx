@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ModalForCard.scss';
 import { ModalProps } from '../../../../common/interfaces/ModalPropsForCard';
-
+import { toast } from 'react-toastify';
 
 const ModalForCard: React.FC<ModalProps> = ({
     isOpen,
@@ -14,16 +14,28 @@ const ModalForCard: React.FC<ModalProps> = ({
     cardCustom,
     setCardCustom,
   }) => {
+
+    const validateTitle = (title: string) => {
+      const regex = /^[a-zA-Z0-9а-яА-ЯєЄіїІїґҐ\s\-_\.]+$/; // Регістр символів для дозволених
+      if (title.trim() === '') {
+        toast.error('Назва картки не повинна бути порожньою');
+        return false;
+      }
+      if (!regex.test(title)) {
+        toast.error('Назва картки містить недопустимі символи');
+        return false;
+      }
+      return true;
+    };
+
     const handleSubmit = () => {
-      if (cardTitle.trim()) { 
+      if (validateTitle(cardTitle)) { 
         onSave(cardTitle, cardDescription, cardCustom);
         setCardTitle(''); 
         setCardDescription(''); 
         setCardCustom({});
         onClose(); 
-      } else {
-        alert('Будь ласка, введіть назву картки');
-      }
+      } 
     };
   
     if (!isOpen) return null;

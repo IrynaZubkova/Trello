@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Modal from './components/Modal/Modal';
 import { apiCreateBoard } from '../../api/boards';
 import './home.scss';
@@ -11,11 +12,14 @@ import { toast } from 'react-toastify';
 const Home: React.FC<HomeProps> = ({ board = [], update}) => { 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [boards, setBoards] = useState<BoardData[]>(board);
-
+  const location = useLocation();
+  
   useEffect(() => {
     setBoards(board); 
   }, [board]);
 
+
+  
   const handleBoardCreated = async (newBoardTitle: string, newBoardColor: string) => {
     try {
       console.log('Створюємо дошку з назвою:', newBoardTitle, 'та кольором:', newBoardColor);
@@ -41,7 +45,9 @@ const Home: React.FC<HomeProps> = ({ board = [], update}) => {
     }
   };
   
-
+  useEffect(() => {
+    update(boards); // Оновлюємо дошки при поверненні на Home
+  }, [location]);
   
 const handleBackgroundChange = async (boardId: number, newBackground: string, newBackgroundImage: string) => {
   try {

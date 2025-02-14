@@ -1,7 +1,7 @@
 export interface BoardProps {
   board: BoardData;
   fetchBoards: () => void; 
-  onBackgroundChange: (boardId: number, newBackground: string, newBackgroundImage: string) => void;
+  onBackgroundChange?: (boardId: number, newBackground: string, newBackgroundImage: string) => void;
   onTitleChange: (boardId: number, newTitle: string) => void;
   onBoardDelete?: (boardId: number) => void; 
 }

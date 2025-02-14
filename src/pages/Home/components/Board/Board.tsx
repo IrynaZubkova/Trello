@@ -44,9 +44,6 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
     }
     
     console.log(`Deleting board with ID: ${board.id}`);
-    const confirmDelete = window.confirm(`Ви дійсно хочете видалити дошку "${board.title}"?`);
-    
-    if (confirmDelete) {
       try {
         await api.delete(`/board/${board.id}`);
         fetchBoards();
@@ -57,7 +54,6 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
         console.error('Error deleting board:', err);
         toast.error('Не вдалося видалити дошку');
       }
-    }
   };
 
   return (
@@ -78,13 +74,13 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
             fetchBoards={fetchBoards}
           />
         </Link>
-        <EditableBoardBackground
+        {/* <EditableBoardBackground
           boardId={board.id}
           initialBackground={background}
           initialBackgroundImage={backgroundImage} 
           onBackgroundChange={handleBackgroundChange}
           fetchBoards={fetchBoards}
-        />
+        /> */}
         <button 
           className="delete-board-button" 
           onClick={handleDeleteBoard}

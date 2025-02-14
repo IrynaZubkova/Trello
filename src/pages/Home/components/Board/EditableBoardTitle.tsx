@@ -14,7 +14,7 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
     if (!regex.test(value)) {
       setError('');
       toast.error('Назва дошки містить недопустимі символи'); 
-     
+      return;
     } else {
       setError(null);
     }
@@ -26,6 +26,7 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
       toast.error('Назва не може бути порожньою або складатися лише з пробілів'); 
       return;
     }
+    
     if (error) return;
 
     try {

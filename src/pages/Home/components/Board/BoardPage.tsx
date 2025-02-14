@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { apiGetBoardById } from '../../../../api/boards';
+import { apiGetBoardById, apiUpdateBoardBackground } from '../../../../api/boards';
 import Board from './Board';
 import { BoardData, IList } from '../../../../common/interfaces/BoardData';
 import List from '../List/List';
 import {ModalForList} from '../List/ModalForList';
 import { apiAddList, apiDeleteList, apiUpdateListTitle} from '../../../../api/list';
 import ProgressBar from '@ramonak/react-progress-bar';
+import EditableBoardBackground from './EditableBoardBackground'; 
 import { toast } from 'react-toastify';
 
 const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
@@ -16,8 +17,12 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
    const [isModalOpen, setIsModalOpen] = useState(false);
    const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [background, setBackground] = useState<string>('');
    const navigate = useNavigate();
   
+   useEffect(() => {
+    fetchBoardData();
+  }, [board_id]);
 
   const fetchBoardData = async () => {
     if (!board_id) {
@@ -65,9 +70,18 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     fetchBoardData();
   }, [board_id]);
 
-  const handleBackgroundChange = (boardId: number, color: string) => {
-    console.log(`Changing background for board ${boardId} to ${color}`);
-    
+  const handleBackgroundChange = async (newBackground: string) => {
+    if (!board) return;
+    try {
+      setBackground(newBackground);
+      await apiUpdateBoardBackground(board.id, newBackground);
+      setBoard((prev) => prev ? { ...prev, custom: { ...prev.custom, backgroundColor: newBackground } } : prev);
+      update();
+      toast.success('Фон дошки успішно змінено');
+    } catch (error) {
+      console.error('Помилка при зміні фону:', error);
+      toast.error('Не вдалося змінити фон дошки');
+    }
   };
 
   const handleTitleChange = (boardId: number, newTitle: string) => {
@@ -159,7 +173,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       <Board 
         board={board} 
         onBoardDelete={handleBoardDeleted} 
-        onBackgroundChange={handleBackgroundChange} 
+        // onBackgroundChange={handleBackgroundChange} 
         fetchBoards={update} 
         onTitleChange={handleTitleChange}  
       />
@@ -200,6 +214,13 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleAddList}
+      />
+      <EditableBoardBackground 
+        boardId={board.id} 
+        initialBackground={background} 
+        initialBackgroundImage={board.custom?.backgroundImage || ''} 
+        fetchBoards={update} 
+        onBackgroundChange={handleBackgroundChange} 
       />
     </div>
   );

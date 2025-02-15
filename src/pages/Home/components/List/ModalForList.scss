@@ -25,11 +25,13 @@
     &:first-of-type {
       background-color: #f16666; 
       color: white;
+      height: 35px;
     }
 
     &:last-of-type {
       background-color:#4CAF50;
       color: white;
+      height: 35px;
     }
   }
   button {
@@ -42,10 +44,12 @@
     &:first-of-type {
       background-color:#df5959; 
       color: white;
+      height: 35px;
     }
 
     &:last-of-type {
       background-color:#4CAF50;  
       color: white;
+      height: 35px;
     }
   }

@@ -173,7 +173,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       <Board 
         board={board} 
         onBoardDelete={handleBoardDeleted} 
-        // onBackgroundChange={handleBackgroundChange} 
+        onBackgroundChange={handleBackgroundChange} 
         fetchBoards={update} 
         onTitleChange={handleTitleChange}  
       />

@@ -76,6 +76,7 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
 
   return (
     <div className="editable-board-background">
+      
       <label>
         <span>Виберіть тип фону:</span>
         <div>
@@ -107,17 +108,19 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
             onChange={(e) => setBackgroundColor(e.target.value)}
             aria-label="Виберіть колір фону дошки"
           />
-          <button onClick={handleColorChange}>Зберегти колір</button>
+          <button className="save-color-btn" onClick={handleColorChange}>Зберегти колір</button>
         </>
       ) : (
         <>
-          <div style={{ backgroundImage: `url(${image})`, height: '100px', width: '100px', backgroundSize: 'cover' }}></div>
+         <div className="image-upload-container">
+          <div style={{ backgroundImage: `url(${image})` }}></div>
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange} // Обробляємо вибір файлу
           />
-          <button onClick={handleImageChange}>Зберегти картинку</button>
+          <button  className="save-image-btn" onClick={handleImageChange}>Зберегти картинку</button>
+        </div>
         </>
       )}
     </div>

@@ -11,7 +11,7 @@
   margin-top: 20px;
 }
 .board {
-  // background-color: #f0f0f0;
+  background-color: #f0f0f0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -34,15 +34,25 @@
 .delete-board-button:hover {
   background-color: rgb(255, 4, 4);
 }
-
+.editable-board-background {
+  display: flex;
+  justify-content: flex-start; 
+}
 
 .editable-board-background label {
-  display: flex;
+  display:inline-flex;
   align-items: center;
   gap: 10px;
   font-size: 25px;
+  margin-left: 10px;
+  margin-top: 10px; 
+  margin-right: 10px;
+  line-height: 1;
 }
+
 .editable-board-background input[type='color'] {
+  margin-right: 20px;
+  margin-top: 25px;
   appearance: none; 
   -webkit-appearance: none;
   cursor: pointer;
@@ -70,6 +80,98 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
+.editable-board-background input[type="radio"] {
+  appearance: none;  
+  -webkit-appearance: none;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background-color: #f1f1f1;  
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.editable-board-background input[type="radio"]:checked {
+  background-color: #88e2f9;  
+}
+
+.editable-board-background input[type="radio"]:hover {
+  transform: scale(1.1); 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);  
+}
+
+/* Стилі для контейнера з зображенням */
+.editable-board-background .image-upload-container {
+  display: ruby;
+  flex-direction: column;
+  align-items: flex-start; 
+  gap: 10px; 
+  margin-top: -70px;
+}
+
+/* Стилі для кнопки "Вибрати файл" */
+.editable-board-background input[type="file"] {
+  color: transparent; 
+  margin-top: 75px; 
+  cursor: pointer;
+}
+
+/* Стилі для кнопки "Зберегти картинку" */
+.editable-board-background button {
+  margin-top: 10px;
+ 
+}
+
+/* Приховуємо текст "Файл не вибрано" */
+.editable-board-background .file-name {
+  opacity: 0;
+    width: 0;
+  height: 0;
+}
+
+.editable-board-background input[type="file"]::-webkit-file-upload-button {
+  background-color: #7fdce2; 
+  color: white; 
+  border: none;
+  padding: 8px 12px;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: 'Caveat', cursive;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.editable-board-background input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #588bcf; 
+}
+
+.editable-board-background input[type="file"]::-webkit-file-upload-button:active {
+  background-color: #3945cb; 
+  transform: scale(0.98);
+}
+.editable-board-background .image-upload-container div {
+  height: 30px;
+  width: 45px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 148px;
+  margin-bottom: -5px;
+  margin-right: 10px;
+}
+
+.save-color-btn {
+  margin-left: 20px; 
+}
+
+
+.save-image-btn {
+  margin-left: -105px; 
+}
+
 .boardPage {
   width: 100%;
   height: 100%;
@@ -83,7 +185,6 @@
 
 .boardPage .board-item{
   height: 480px;
-  // background: none !important;
 }
 .boardPage .board-title{
   font-size: 60px;
@@ -112,12 +213,13 @@
 }
 .lists {
   width: calc(100% - 120px); 
+  height: 341px;
   display: flex;
   margin-top: -440px;
   overflow-x: auto;
   padding: 10px 0;
   white-space: nowrap;
-  position: relative;
+  position: sticky;
   margin-left: 60px;
   margin-right: 60px; 
 }
@@ -128,6 +230,7 @@
 
 .lists::-webkit-scrollbar {
   height: 20px; 
+  
 }
 
 .lists::-webkit-scrollbar-track {

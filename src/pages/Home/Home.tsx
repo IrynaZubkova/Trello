@@ -31,7 +31,7 @@ const Home: React.FC<HomeProps> = ({ board = [], update}) => {
         title: newBoardTitle,
         custom: { 
           backgroundColor: newBoardColor,
-          backgroundImage: ''  // Додаємо властивість backgroundImage
+          backgroundImage: ''  
         },
         lists: [] 
       }];
@@ -46,7 +46,7 @@ const Home: React.FC<HomeProps> = ({ board = [], update}) => {
   };
   
   useEffect(() => {
-    update(boards); // Оновлюємо дошки при поверненні на Home
+    update(boards); 
   }, [location]);
   
 const handleBackgroundChange = async (boardId: number, newBackground: string, newBackgroundImage: string) => {

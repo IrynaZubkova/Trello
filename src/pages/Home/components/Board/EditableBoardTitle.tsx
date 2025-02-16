@@ -48,7 +48,6 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
   };
 
   const handleBackgroundChange = () => {
-    // const newColor = 'red'; 
     handleBackgroundChange();
   };
 

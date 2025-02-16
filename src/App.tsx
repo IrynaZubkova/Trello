@@ -9,6 +9,10 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+interface BoardResponse {
+  boards?: BoardType[];
+}
+
 function App(): JSX.Element {
   const [board, setBoards] = useState<BoardType[]>([]); 
   const [error, setError] = useState<string | null>(null); 
@@ -19,7 +23,7 @@ function App(): JSX.Element {
     try {
       setLoading(true); 
       setProgress(10);
-      const response = await api.get('/board', {
+      const response = await api.get<BoardResponse>('/board', {
         onDownloadProgress: (progressEvent) => {
           if (progressEvent.total) {
             const percent = Math.round(

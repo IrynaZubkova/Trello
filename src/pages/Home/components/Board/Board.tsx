@@ -74,13 +74,7 @@ const Board: React.FC<BoardProps> = ({ board, fetchBoards, onBackgroundChange })
             fetchBoards={fetchBoards}
           />
         </Link>
-        {/* <EditableBoardBackground
-          boardId={board.id}
-          initialBackground={background}
-          initialBackgroundImage={backgroundImage} 
-          onBackgroundChange={handleBackgroundChange}
-          fetchBoards={fetchBoards}
-        /> */}
+     
         <button 
           className="delete-board-button" 
           onClick={handleDeleteBoard}

@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../../../api/request';
+
 import { EditableBoardBackgroundProps } from '../../../../common/interfaces/EditableBoardBackgroundProps';
 
 const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
   boardId,
   initialBackground,
   onBackgroundChange,
-  fetchBoards,
 }) => {
   const [backgroundType, setBackgroundType] = useState<'color' | 'image'>('color');
   const [backgroundColor, setBackgroundColor] = useState<string>(initialBackground);
-  const [image, setImage] = useState<string | null>(null); // Змінили тип на string | null
-  const [imageFile, setImageFile] = useState<File | null>(null); // Для збереження вибраного файлу
+  const [image, setImage] = useState<string | null>(null); 
+  const [imageFile, setImageFile] = useState<File | null>(null); 
 
   
   const convertImageToBase64 = (file: File) => {
@@ -43,11 +42,11 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
     setBackgroundColor(newColor);
     const boardItem = document.querySelector('.board');
     if (boardItem) {
-      (boardItem as HTMLElement).style.backgroundColor = newColor; // Змінюємо фон
+      (boardItem as HTMLElement).style.backgroundColor = newColor; 
     }
     console.log('Відправка нового кьогору на сервер:', newColor);
     if (onBackgroundChange) {
-      onBackgroundChange( newColor, 'color'); // Можна передавати зміни
+      onBackgroundChange( newColor, 'color');
     }
   };
 
@@ -63,7 +62,7 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
       (boardItem as HTMLElement).style.backgroundImage = `url(${image})`; 
     }
     if (onBackgroundChange) {
-      onBackgroundChange(image, 'image'); // Можна передавати зміни
+      onBackgroundChange(image, 'image'); 
     }
   };
 
@@ -117,7 +116,7 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
           <input
             type="file"
             accept="image/*"
-            onChange={handleFileChange} // Обробляємо вибір файлу
+            onChange={handleFileChange} 
           />
           <button  className="save-image-btn" onClick={handleImageChange}>Зберегти картинку</button>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
-import './Modal.scss'; 
-import {ModalProps} from '../../../../common/interfaces/ModalProps';
+import './Modal.scss';
+import { ModalProps } from '../../../../common/interfaces/ModalProps';
 import { toast } from 'react-toastify';
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
@@ -17,9 +17,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
       toast.error('Назва дошки містить недопустимі символи');
       return;
     }
-    onCreate(title, color); 
-    setTitle(''); 
-    onClose(); 
+    onCreate(title, color);
+    setTitle('');
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -28,19 +28,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Додати нову дошку</h2>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Назва нової дошки"
-        />
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Назва нової дошки" />
         <label>
           Оберіть колір фону:
-          <input
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          />
+          <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
         </label>
         <button onClick={handleCreateClick}>Додати</button>
         <button onClick={onClose}>Закрити</button>
@@ -49,4 +40,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
   );
 };
 
-export default Modal
+export default Modal;

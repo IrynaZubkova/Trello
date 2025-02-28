@@ -9,34 +9,35 @@ import { HomeProps } from '../../common/interfaces/HomeProps';
 import { apiUpdateBoardBackground } from '../../api/boards';
 import { toast } from 'react-toastify';
 
-const Home: React.FC<HomeProps> = ({ board = [], update}) => { 
+const Home: React.FC<HomeProps> = ({ board = [], update }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [boards, setBoards] = useState<BoardData[]>(board);
   const location = useLocation();
-  
+
   useEffect(() => {
-    setBoards(board); 
+    setBoards(board);
   }, [board]);
 
-
-  
   const handleBoardCreated = async (newBoardTitle: string, newBoardColor: string) => {
     try {
       console.log('Створюємо дошку з назвою:', newBoardTitle, 'та кольором:', newBoardColor);
       const newBoard = await apiCreateBoard(newBoardTitle, { backgroundColor: newBoardColor });
       console.log('Створена дошка:', newBoard);
-  
-      const updatedBoards = [...boards, {
-        id: newBoard.id,
-        title: newBoardTitle,
-        custom: { 
-          backgroundColor: newBoardColor,
-          backgroundImage: ''  
+
+      const updatedBoards = [
+        ...boards,
+        {
+          id: newBoard.id,
+          title: newBoardTitle,
+          custom: {
+            backgroundColor: newBoardColor,
+            backgroundImage: '',
+          },
+          lists: [],
         },
-        lists: [] 
-      }];
+      ];
       setBoards(updatedBoards);
-      update(updatedBoards); 
+      update(updatedBoards);
       setIsModalOpen(false);
       toast.success('Дошку успішно створено');
     } catch (error) {
@@ -44,66 +45,57 @@ const Home: React.FC<HomeProps> = ({ board = [], update}) => {
       toast.error('Не вдалося створити дошку');
     }
   };
-  
+
   useEffect(() => {
-    update(boards); 
+    update(boards);
   }, [location]);
-  
-const handleBackgroundChange = async (boardId: number, newBackground: string, newBackgroundImage: string) => {
-  try {
-    await apiUpdateBoardBackground(boardId, newBackground, );
-    const updatedBoards = boards.map((board) =>
-      board.id === boardId
-        ? { ...board, custom: { backgroundColor: newBackground } }
-        : board
-    );
-    setBoards(updatedBoards);
-    update(updatedBoards)
-    toast.success('Колір дошки оновлено');
-  } catch (error) {
-    console.error('Не вдалося оновити колір дошки:', error);
-    toast.error('Не вдалося оновити колір дошки'); 
-  }
-};
 
-const handleBoardDelete = (boardId: number) => {
-  setBoards((prevBoards) => prevBoards.filter(board => board.id !== boardId));
-  update(boards.filter(board => board.id !== boardId)); 
-  toast.success('Дошку видалено');
-};
+  const handleBackgroundChange = async (boardId: number, newBackground: string) => {
+    try {
+      await apiUpdateBoardBackground(boardId, newBackground);
+      const updatedBoards = boards.map((board) =>
+        board.id === boardId ? { ...board, custom: { backgroundColor: newBackground } } : board
+      );
+      setBoards(updatedBoards);
+      update(updatedBoards);
+      toast.success('Колір дошки оновлено');
+    } catch (error) {
+      console.error('Не вдалося оновити колір дошки:', error);
+      toast.error('Не вдалося оновити колір дошки');
+    }
+  };
 
-  function handleTitleChange(boardId: number, newTitle: string): void {
-   console.log('Function handleTitleChange not implemented.');
-  }
+  const handleBoardDelete = (boardId: number) => {
+    setBoards((prevBoards) => prevBoards.filter((board) => board.id !== boardId));
+    update(boards.filter((board) => board.id !== boardId));
+    toast.success('Дошку видалено');
+  };
 
   return (
     <div>
       <h1 className="board-list-title">Список Дошок</h1>
-      <button className="add-board-button" onClick={() => setIsModalOpen(true)}>Додати дошку</button>
-      
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onCreate={handleBoardCreated}
-      />
-      
+      <button className="add-board-button" onClick={() => setIsModalOpen(true)}>
+        Додати дошку
+      </button>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onCreate={handleBoardCreated} />
+
       <div className="Content">
-      {boards.length > 0 ? (
-  boards.map((boardItem) => (
-    <div key={boardItem.id}>
-      <Board
-       onBoardDelete={handleBoardDelete}
-        board={boardItem}
-        fetchBoards={() => update(boards)}
-        onBackgroundChange={handleBackgroundChange}
-        onTitleChange={handleTitleChange}  
-     />
-     
-    </div>
-  ))
-) : (
-  <p>Дошок немає.</p>
-)}
+        {boards.length > 0 ? (
+          boards.map((boardItem) => (
+            <div key={boardItem.id}>
+              <Board
+                onBoardDelete={handleBoardDelete}
+                board={boardItem}
+                fetchBoards={() => update(boards)}
+                onBackgroundChange={handleBackgroundChange}
+                // onTitleChange={handleTitleChange}
+              />
+            </div>
+          ))
+        ) : (
+          <p>Дошок немає.</p>
+        )}
       </div>
     </div>
   );

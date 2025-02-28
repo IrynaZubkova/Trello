@@ -1,13 +1,13 @@
 import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD, GET_BOARD } from './routes';
 import api from './request';
-import { BoardData, IList } from '../common/interfaces/BoardProps';
+import { BoardData } from '../common/interfaces/BoardProps';
 
 export const apiGetBoardById = async (id: string): Promise<BoardData> => {
   try {
     return await api.get(`${GET_BOARD}/${id}`);
   } catch (error) {
     console.error('Помилка при отриманні дошrb:', error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -16,14 +16,14 @@ const apiCreateBoard = async (
   custom?: { backgroundColor: string }
 ): Promise<{ result: string; id: number }> => {
   try {
-    return await api.post<{ result: string; id: number }, any >(CREATE_BOARD, { title, custom });
+    return await api.post<{ result: string; id: number }, any>(CREATE_BOARD, { title, custom });
   } catch (error) {
     console.error('Помилка при створенні дошки:', error);
     throw error;
   }
 };
 
-const apiEditBoard = async function(id: number, title: string) {
+const apiEditBoard = async function (id: number, title: string) {
   try {
     return await api.put(`${EDIT_BOARD}/${id}`, { title });
   } catch (error) {

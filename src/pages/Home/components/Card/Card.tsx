@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { CardProps } from '../../../../common/interfaces/CardProps';
 
 export function Card({ title }: CardProps): JSX.Element {

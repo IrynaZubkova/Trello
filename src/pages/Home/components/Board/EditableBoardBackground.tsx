@@ -2,17 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 import { EditableBoardBackgroundProps } from '../../../../common/interfaces/EditableBoardBackgroundProps';
 
-const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
-  boardId,
-  initialBackground,
-  onBackgroundChange,
-}) => {
+const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({ initialBackground, onBackgroundChange }) => {
   const [backgroundType, setBackgroundType] = useState<'color' | 'image'>('color');
   const [backgroundColor, setBackgroundColor] = useState<string>(initialBackground);
-  const [image, setImage] = useState<string | null>(null); 
-  const [imageFile, setImageFile] = useState<File | null>(null); 
+  const [image, setImage] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  
   const convertImageToBase64 = (file: File) => {
     return new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
@@ -30,23 +25,22 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
     if (imageFile) {
       convertImageToBase64(imageFile)
         .then((base64Image) => {
-          setImage(base64Image); 
+          setImage(base64Image);
         })
         .catch((err) => console.error('Помилка при конвертації зображення:', err));
     }
   }, [imageFile]);
-
 
   const handleColorChange = async () => {
     const newColor = backgroundColor;
     setBackgroundColor(newColor);
     const boardItem = document.querySelector('.board');
     if (boardItem) {
-      (boardItem as HTMLElement).style.backgroundColor = newColor; 
+      (boardItem as HTMLElement).style.backgroundColor = newColor;
     }
     console.log('Відправка нового кьогору на сервер:', newColor);
     if (onBackgroundChange) {
-      onBackgroundChange( newColor, 'color');
+      onBackgroundChange(newColor, 'color');
     }
   };
 
@@ -56,26 +50,25 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
       return;
     }
     console.log('Відправка base64 зображення на сервер:', image);
-    
+
     const boardItem = document.querySelector('.board');
     if (boardItem) {
-      (boardItem as HTMLElement).style.backgroundImage = `url(${image})`; 
+      (boardItem as HTMLElement).style.backgroundImage = `url(${image})`;
     }
     if (onBackgroundChange) {
-      onBackgroundChange(image, 'image'); 
+      onBackgroundChange(image, 'image');
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file); 
+      setImageFile(file);
     }
   };
 
   return (
     <div className="editable-board-background">
-      
       <label>
         <span>Виберіть тип фону:</span>
         <div>
@@ -107,19 +100,19 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({
             onChange={(e) => setBackgroundColor(e.target.value)}
             aria-label="Виберіть колір фону дошки"
           />
-          <button className="save-color-btn" onClick={handleColorChange}>Зберегти колір</button>
+          <button className="save-color-btn" onClick={handleColorChange}>
+            Зберегти колір
+          </button>
         </>
       ) : (
         <>
-         <div className="image-upload-container">
-          <div style={{ backgroundImage: `url(${image})` }}></div>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange} 
-          />
-          <button  className="save-image-btn" onClick={handleImageChange}>Зберегти картинку</button>
-        </div>
+          <div className="image-upload-container">
+            <div style={{ backgroundImage: `url(${image})` }}></div>
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+            <button className="save-image-btn" onClick={handleImageChange}>
+              Зберегти картинку
+            </button>
+          </div>
         </>
       )}
     </div>

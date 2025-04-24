@@ -4,15 +4,60 @@ import Modal from './components/Modal/Modal';
 import { apiCreateBoard } from '../../api/boards';
 import './home.scss';
 import Board from './components/Board/Board';
-import { BoardData } from '../../common/interfaces/EditableBoardTitleProps';
-import { HomeProps } from '../../common/interfaces/HomeProps';
 import { apiUpdateBoardBackground } from '../../api/boards';
+import { AxiosProgressEvent } from 'axios';
+import api from '../../api/request';
+import ProgressBar from '@ramonak/react-progress-bar';
 import { toast } from 'react-toastify';
+import { BoardData } from '../../common/interfaces/BoardData';
 
-const Home: React.FC<HomeProps> = ({ board = [], update }) => {
+interface BoardResponse {
+  boards?: BoardData[];
+}
+
+const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [boards, setBoards] = useState<BoardData[]>(board);
+  const [board, setBoards] = useState<BoardData[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
+
+  const update = async (): Promise<void> => {
+    try {
+      setLoading(true);
+      setProgress(10);
+      const response = await api.get<BoardResponse>('/board', {
+        onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+          if (progressEvent.total) {
+            const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percent);
+          }
+        },
+      });
+      if ('boards' in response && Array.isArray(response.boards)) {
+        setBoards(response.boards);
+        console.log('response.boards', response.boards);
+      }
+
+      setProgress(100);
+    } catch {
+      setError('Не вдалося завантажити дошки');
+      toast.error('Не вдалося завантажити дошки', {
+        position: 'top-right',
+        autoClose: 5000,
+        theme: 'colored',
+      });
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
+    }
+  };
+
+  useEffect(() => {
+    update();
+  }, []);
 
   useEffect(() => {
     setBoards(board);
@@ -25,7 +70,7 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => {
       console.log('Створена дошка:', newBoard);
 
       const updatedBoards = [
-        ...boards,
+        ...board,
         {
           id: newBoard.id,
           title: newBoardTitle,
@@ -37,7 +82,7 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => {
         },
       ];
       setBoards(updatedBoards);
-      update(updatedBoards);
+      update();
       setIsModalOpen(false);
       toast.success('Дошку успішно створено');
     } catch (error) {
@@ -47,17 +92,17 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => {
   };
 
   useEffect(() => {
-    update(boards);
+    update();
   }, [location]);
 
   const handleBackgroundChange = async (boardId: number, newBackground: string) => {
     try {
       await apiUpdateBoardBackground(boardId, newBackground);
-      const updatedBoards = boards.map((board) =>
+      const updatedBoards = board.map((board) =>
         board.id === boardId ? { ...board, custom: { backgroundColor: newBackground } } : board
       );
       setBoards(updatedBoards);
-      update(updatedBoards);
+      update();
       toast.success('Колір дошки оновлено');
     } catch (error) {
       console.error('Не вдалося оновити колір дошки:', error);
@@ -67,12 +112,16 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => {
 
   const handleBoardDelete = (boardId: number) => {
     setBoards((prevBoards) => prevBoards.filter((board) => board.id !== boardId));
-    update(boards.filter((board) => board.id !== boardId));
+    update();
     toast.success('Дошку видалено');
   };
 
   return (
     <div>
+      <div className="progress-container">
+        {loading && <ProgressBar completed={progress} bgColor="blue" height="10px" />}
+      </div>
+      {error && <div>{error}</div>}
       <h1 className="board-list-title">Список Дошок</h1>
       <button className="add-board-button" onClick={() => setIsModalOpen(true)}>
         Додати дошку
@@ -81,20 +130,19 @@ const Home: React.FC<HomeProps> = ({ board = [], update }) => {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onCreate={handleBoardCreated} />
 
       <div className="Content">
-        {boards.length > 0 ? (
-          boards.map((boardItem) => (
+        {board.length > 0 ? (
+          board.map((boardItem) => (
             <div key={boardItem.id}>
               <Board
                 onBoardDelete={handleBoardDelete}
                 board={boardItem}
-                fetchBoards={() => update(boards)}
+                fetchBoards={() => update()}
                 onBackgroundChange={handleBackgroundChange}
-                // onTitleChange={handleTitleChange}
               />
             </div>
           ))
         ) : (
-          <p>Дошок немає.</p>
+          <p>Завантажується...</p>
         )}
       </div>
     </div>

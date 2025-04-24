@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiGetBoardById, apiUpdateBoardBackground } from '../../../../api/boards';
 import Board from './Board';
@@ -13,13 +13,17 @@ import { toast } from 'react-toastify';
 const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   const { board_id } = useParams<{ board_id: string }>();
   const [board, setBoard] = useState<BoardData | null>(null);
-  const [lists, setLists] = useState(board?.lists || []);
+  const [lists, setLists] = useState<IList[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [background, setBackground] = useState<string>('');
   const navigate = useNavigate();
+  const listsRef = useRef(lists);
 
+  useEffect(() => {
+    listsRef.current = lists;
+  }, [lists]);
   useEffect(() => {
     fetchBoardData();
   }, [board_id]);
@@ -33,7 +37,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
     }
     setProgress(60);
     try {
-      const response = await apiGetBoardById(board_id);
+      const response = await apiGetBoardById(Number(board_id));
       const boardData = { ...response, id: Number(board_id) };
       setBoard(boardData as BoardData);
       setLists(boardData.lists || []);
@@ -41,7 +45,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
       if (Array.isArray(boardData.lists)) {
         setLists(boardData.lists);
       } else {
-        setLists([]); // Set an empty array if lists are not available
+        setLists([]);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -156,7 +160,15 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
   }
 
   return (
-    <div className="boardPage">
+    <div
+      className="boardPage"
+      style={{
+        backgroundColor: background,
+        backgroundImage: background ? `url(${background})` : undefined,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className="progress-container">
         {loading && <ProgressBar completed={progress} bgColor="blue" height="10px" />}
       </div>
@@ -179,8 +191,14 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
                   cards={list.cards || []}
                   update={fetchBoardData}
                   updateTitle={updateListTitle}
+                  onCardDrop={(updatedLists) => setLists(updatedLists)}
+                  allLists={lists}
+                  setAllLists={setLists}
+                  listsRef={listsRef}
                 />
-                <button onClick={() => handleDeleteList(list.id)}>Видалити</button>
+                <button className="delete-list-button" onClick={() => handleDeleteList(list.id)}>
+                  x
+                </button>
               </div>
             ) : null
           )}
@@ -193,7 +211,7 @@ const BoardPage: React.FC<{ update: () => void }> = ({ update }) => {
         boardId={board.id}
         initialBackground={background}
         initialBackgroundImage={board.custom?.backgroundImage || ''}
-        fetchBoards={update}
+        update={update}
         onBackgroundChange={handleBackgroundChange}
       />
     </div>

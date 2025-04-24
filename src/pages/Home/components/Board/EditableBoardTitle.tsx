@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { apiEditBoard } from '../../../../api/boards';
-import { EditableBoardTitleProps } from '../../../../common/interfaces/EditableBoardTitleProps';
 import { regex } from '../../../../common/constants/regex';
 import { toast } from 'react-toastify';
+import { EditableBoardTitleProps } from '../../../../common/interfaces/BoardData';
 
 const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoards, backgroundColor }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -11,6 +11,11 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
+    if (value === '') {
+      setNewTitle('');
+      setError(null);
+      return;
+    }
     if (!regex.test(value)) {
       setError('');
       toast.error('Назва дошки містить недопустимі символи');
@@ -22,7 +27,9 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
   };
 
   const handleSave = async () => {
-    if (!newTitle.trim()) {
+    const trimmedTitle = newTitle.trim();
+    if (!trimmedTitle) {
+      setNewTitle(board.title);
       toast.error('Назва не може бути порожньою або складатися лише з пробілів');
       return;
     }
@@ -58,6 +65,7 @@ const EditableBoardTitle: React.FC<EditableBoardTitleProps> = ({ board, fetchBoa
               onChange={handleTitleChange}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
+              className="edit-title-input"
             />
             {error && <p style={{ color: 'red' }}>{error}</p>}
           </div>

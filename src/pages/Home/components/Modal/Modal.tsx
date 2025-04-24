@@ -1,11 +1,43 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import './Modal.scss';
-import { ModalProps } from '../../../../common/interfaces/ModalProps';
+import { ModalPropsBoard } from '../../../../common/interfaces/ModalProps';
 import { toast } from 'react-toastify';
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
-  const [title, setTitle] = React.useState('');
-  const [color, setColor] = React.useState('#ffffff');
+const Modal: React.FC<ModalPropsBoard> = ({ isOpen, onClose, onCreate }) => {
+  const [title, setTitle] = useState('');
+  const [color, setColor] = useState('#ffffff');
+  const modalRootRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Створюємо контейнер для модалки при першому рендері
+    modalRootRef.current = document.createElement('div');
+    document.body.appendChild(modalRootRef.current);
+
+    return () => {
+      // Видаляємо контейнер при розмонтуванні компонента
+      if (modalRootRef.current) {
+        document.body.removeChild(modalRootRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !modalRootRef.current) return null;
 
   const handleCreateClick = () => {
     if (title.trim() === '') {
@@ -22,22 +54,25 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
     onClose();
   };
 
-  if (!isOpen) return null;
+  const modalContent = (
+    <form onSubmit={handleCreateClick}>
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Додати нову дошку</h2>
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Додати нову дошку</h2>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Назва нової дошки" />
-        <label>
-          Оберіть колір фону:
-          <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
-        </label>
-        <button onClick={handleCreateClick}>Додати</button>
-        <button onClick={onClose}>Закрити</button>
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Назва нової дошки" />
+          <label>
+            Оберіть колір фону:
+            <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
+          </label>
+          <button onClick={handleCreateClick}>Додати</button>
+          <button onClick={onClose}>Закрити</button>
+        </div>
       </div>
-    </div>
+    </form>
   );
+
+  return ReactDOM.createPortal(modalContent, modalRootRef.current);
 };
 
 export default Modal;

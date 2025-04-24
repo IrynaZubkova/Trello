@@ -10,11 +10,9 @@
   gap: 20px;
   margin-top: 20px;
 }
+
 .board {
-  background-color: #f0f0f0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: #f0f0f0 center/cover no-repeat;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -34,106 +32,91 @@
 .delete-board-button:hover {
   background-color: rgb(255, 4, 4);
 }
+
 .editable-board-background {
   display: flex;
-  justify-content: flex-start; 
+  justify-content: flex-start;
 }
 
 .editable-board-background label {
-  display:inline-flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
   font-size: 25px;
-  margin-left: 10px;
-  margin-top: 10px; 
-  margin-right: 10px;
+  margin: 10px;
   line-height: 1;
 }
 
-.editable-board-background input[type='color'] {
-  margin-right: 20px;
-  margin-top: 25px;
-  appearance: none; 
+.editable-board-background input[type='color'],
+.editable-board-background input[type="radio"] {
+  appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
   width: 20px;
   height: 20px;
   border: none;
   border-radius: 50%;
-  background-color: currentColor; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.editable-board-background input[type='color']::-webkit-color-swatch-wrapper {
-  padding: 0;
-  border-radius: 50%; 
+.editable-board-background input[type='color'] {
+  margin: 25px 20px 0 0;
+  background-color: currentColor;
 }
 
-.editable-board-background input[type='color']::-webkit-color-swatch {
-  border: none;
-  border-radius: 50%; 
-}
-
-.editable-board-background input[type='color']:hover {
+.editable-board-background input[type='color']:hover,
+.editable-board-background input[type="radio"]:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.editable-board-background input[type="radio"] {
-  appearance: none;  
-  -webkit-appearance: none;
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border: none;
+.editable-board-background input[type='color']::-webkit-color-swatch-wrapper,
+.editable-board-background input[type='color']::-webkit-color-swatch {
+  padding: 0;
   border-radius: 50%;
-  background-color: #f1f1f1;  
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+}
+
+.editable-board-background input[type="radio"] {
+  background-color: #f1f1f1;
 }
 
 .editable-board-background input[type="radio"]:checked {
-  background-color: #88e2f9;  
+  background-color: #88e2f9;
 }
 
-.editable-board-background input[type="radio"]:hover {
-  transform: scale(1.1); 
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);  
-}
-
-/* Стилі для контейнера з зображенням */
-.editable-board-background .image-upload-container {
+/* Контейнер зображення */
+.image-upload-container {
   display: ruby;
   flex-direction: column;
-  align-items: flex-start; 
-  gap: 10px; 
+  align-items: flex-start;
+  gap: 10px;
   margin-top: -70px;
 }
 
-/* Стилі для кнопки "Вибрати файл" */
+/* Стилі для завантаження файлу */
 .editable-board-background input[type="file"] {
-  color: transparent; 
-  margin-top: 75px; 
+  color: transparent;
+  margin-top: 75px;
   cursor: pointer;
 }
 
-/* Стилі для кнопки "Зберегти картинку" */
+/* Стилі кнопки */
 .editable-board-background button {
   margin-top: 10px;
- 
 }
 
-/* Приховуємо текст "Файл не вибрано" */
-.editable-board-background .file-name {
+/* Приховуємо "Файл не вибрано" */
+.file-name {
   opacity: 0;
-    width: 0;
+  width: 0;
   height: 0;
 }
 
 .editable-board-background input[type="file"]::-webkit-file-upload-button {
-  background-color: #7fdce2; 
-  color: white; 
+  background-color: #7fdce2;
+  color: white;
   border: none;
   padding: 8px 12px;
   font-size: 20px;
@@ -145,31 +128,29 @@
 }
 
 .editable-board-background input[type="file"]::-webkit-file-upload-button:hover {
-  background-color: #588bcf; 
+  background-color: #588bcf;
 }
 
 .editable-board-background input[type="file"]::-webkit-file-upload-button:active {
-  background-color: #3945cb; 
+  background-color: #3945cb;
   transform: scale(0.98);
 }
-.editable-board-background .image-upload-container div {
+
+.image-upload-container div {
   height: 30px;
   width: 45px;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: center/contain no-repeat;
   border-radius: 148px;
   margin-bottom: -5px;
   margin-right: 10px;
 }
 
 .save-color-btn {
-  margin-left: 20px; 
+  margin-left: 20px;
 }
 
-
 .save-image-btn {
-  margin-left: -105px; 
+  margin-left: -105px;
 }
 
 .boardPage {
@@ -178,22 +159,25 @@
   position: relative;
 }
 
-.boardPage .board{
+.boardPage .board {
   width: 96%;
   height: 580px;
 }
 
-.boardPage .board-item{
+.boardPage .board-item {
   height: 480px;
 }
-.boardPage .board-title{
+
+.boardPage .board-title {
   font-size: 60px;
-  color: #000000;
+  color: #000;
+  max-width: 100%;
 }
-.boardPage .delete-board-button{
-  position: absolute; 
-  top: 550px; 
-  right: 80px; 
+
+.boardPage .delete-board-button {
+  position: absolute;
+  top: 550px;
+  right: 80px;
   padding: 10px 20px;
   background-color: #fd7283;
   color: #fff;
@@ -201,9 +185,10 @@
   border-radius: 5px;
   cursor: pointer;
 }
-.boardPage .add-list-button{
-  position: absolute; 
-  top: 120px; 
+
+.boardPage .add-list-button {
+  position: absolute;
+  top: 55px;
   left: 120px;
   padding: 10px 20px;
   color: #fff;
@@ -211,44 +196,85 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .lists {
-  width: calc(100% - 120px); 
-  height: 341px;
+  width: calc(100% - 120px);
+  height: 401px;
   display: flex;
-  margin-top: -440px;
   overflow-x: auto;
   padding: 10px 0;
   white-space: nowrap;
-  position: sticky;
-  margin-left: 60px;
-  margin-right: 60px; 
+  position: absolute; 
+  top: 120px; 
+  left: 60px;
+  right: 60px;
 }
+
+
 .list-item {
+  position: relative;
   flex-shrink: 0;
-  margin-right: 70px; 
+  margin-right: 70px;
 }
 
 .lists::-webkit-scrollbar {
-  height: 20px; 
-  
+  height: 20px;
 }
 
 .lists::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
   border-radius: 10px;
 }
 
 .lists::-webkit-scrollbar-thumb {
-  background: #ffc29c; 
-  border-radius: 10px; 
+  background: #ffc29c;
+  border-radius: 10px;
 }
 
 .lists::-webkit-scrollbar-thumb:hover {
-  background: #88e2f9; 
+  background: #88e2f9;
 }
+
 .progress-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
+}
+
+.list-item .delete-list-button {
+  background-color: rgb(255, 32, 95);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  z-index: 10;
+  padding: 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.delete-list-button:hover {
+  background-color: rgb(204, 0, 0);
+}
+
+.edit-title-input {
+  background-color: transparent;
+  color: inherit;
+  font-size: inherit;
+  border: none;
+  outline: none;
+  width: inherit;
+  font-family: inherit;
+  text-align: center;
+  font-weight: inherit;
 }

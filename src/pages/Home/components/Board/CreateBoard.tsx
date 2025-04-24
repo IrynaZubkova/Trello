@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../../../api/request';
-import { CreateBoardProps, BoardType } from '../../../../common/interfaces/CreateBoardProps';
+import { CreateBoardProps, BoardData } from '../../../../common/interfaces/BoardData';
 
 const CreateBoard: React.FC<CreateBoardProps> = ({ onBoardCreated }) => {
   const [title, setTitle] = useState('');
@@ -15,7 +15,7 @@ const CreateBoard: React.FC<CreateBoardProps> = ({ onBoardCreated }) => {
 
     try {
       const response = await api.post('/boards', { title, backgroundColor: color });
-      const newBoard: BoardType = response.data;
+      const newBoard: BoardData = response.data;
       onBoardCreated(newBoard);
       setTitle('');
       setColor('#ffffff');

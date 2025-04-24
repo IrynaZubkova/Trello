@@ -1,8 +1,8 @@
 import { CREATE_BOARD, DELETE_BOARD, EDIT_BOARD, GET_BOARD } from './routes';
 import api from './request';
-import { BoardData } from '../common/interfaces/BoardProps';
+import { BoardData } from '../common/interfaces/BoardData';
 
-export const apiGetBoardById = async (id: string): Promise<BoardData> => {
+export const apiGetBoardById = async (id: number): Promise<BoardData> => {
   try {
     return await api.get(`${GET_BOARD}/${id}`);
   } catch (error) {

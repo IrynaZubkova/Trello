@@ -1,13 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import './ModalForList.scss';
-import { ModalProps } from '../../../../common/interfaces/ModalPropsForList';
+import { ModalPropsLists } from '../../../../common/interfaces/ModalProps';
 import { regex } from '../../../../common/constants/regex';
 import { toast } from 'react-toastify';
 
-export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) => {
+export const ModalForList: React.FC<ModalPropsLists> = ({ isOpen, onClose, onSave }) => {
   const [title, setTitle] = useState('');
+  const modalRootRef = useRef<HTMLDivElement | null>(null);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    // Створюємо новий <div> для модалки, якщо його немає
+    modalRootRef.current = document.createElement('div');
+    document.body.appendChild(modalRootRef.current);
+
+    return () => {
+      // Видаляємо контейнер модалки при розмонтуванні компонента
+      if (modalRootRef.current) {
+        document.body.removeChild(modalRootRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !modalRootRef.current) return null;
 
   const validateInput = (value: string) => {
     if (value.trim() === '') {
@@ -42,20 +72,25 @@ export const ModalForList: React.FC<ModalProps> = ({ isOpen, onClose, onSave }) 
     setTitle(value);
     validateInput(value);
   };
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2>Додати список</h2>
-        <input type="text" value={title} onChange={handleInputChange} placeholder="Введіть назву списку" />
-        <div className="modal-actions">
-          <button onClick={onClose}>Закрити</button>
-          <button onClick={handleSave} disabled={!title.trim()}>
-            Зберегти
-          </button>
+
+  const modalContent = (
+    <form onSubmit={handleSave}>
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <h2>Додати список</h2>
+          <input type="text" value={title} onChange={handleInputChange} placeholder="Введіть назву списку" />
+          <div className="modal-actions">
+            <button onClick={onClose}>Закрити</button>
+            <button onClick={handleSave} disabled={!title.trim()}>
+              Зберегти
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
   );
+
+  return ReactDOM.createPortal(modalContent, modalRootRef.current);
 };
 
 export default ModalForList;

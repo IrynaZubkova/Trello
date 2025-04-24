@@ -3,6 +3,6 @@ export interface EditableBoardBackgroundProps {
   initialBackground: string;
   initialBackgroundImage: string;
   onBackgroundChange: (background: string, type: 'color' | 'image') => void;
-  fetchBoards: () => void;
+  update: () => void;
   style?: React.CSSProperties;
 }

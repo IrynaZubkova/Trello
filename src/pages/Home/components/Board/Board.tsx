@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../../../api/request';
 import EditableBoardTitle from './EditableBoardTitle';
 import './board.scss';
-import { BoardProps } from '../../../../common/interfaces/BoardProps';
+import { BoardProps } from '../../../../common/interfaces/BoardData';
 import { toast } from 'react-toastify';
 
 const Board: React.FC<BoardProps> = ({ board, fetchBoards }) => {

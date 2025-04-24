@@ -36,6 +36,7 @@ const EditableBoardBackground: React.FC<EditableBoardBackgroundProps> = ({ initi
     setBackgroundColor(newColor);
     const boardItem = document.querySelector('.board');
     if (boardItem) {
+      (boardItem as HTMLElement).style.backgroundImage = 'none';
       (boardItem as HTMLElement).style.backgroundColor = newColor;
     }
     console.log('Відправка нового кьогору на сервер:', newColor);

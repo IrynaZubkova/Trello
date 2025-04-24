@@ -1,3 +1,5 @@
+import { ICard } from '../common/interfaces/BoardData';
+import instance from './request';
 import api from './request';
 import { CREATE_CARD, DELETE_CARD } from './routes';
 
@@ -7,8 +9,8 @@ export const apiAddCard = async (
   title: string,
   position: number,
   description: string,
-  custom: any
-) => {
+  custom: { deadline: string }
+): Promise<ICard> => {
   const url = `${CREATE_CARD}/${boardId}/card`;
 
   const response = await api.post(url, {
@@ -25,4 +27,18 @@ export const apiDeleteCard = async (boardId: number, cardId: number) => {
   const url = `${DELETE_CARD}/${boardId}/card/${cardId}`;
   const response = await api.delete(url);
   return response.data;
+};
+
+export const apiPutCards = async (board_id: number, id: number, position: number, list_id: number) => {
+  const { data } = await instance.put(`/board/${board_id}/card`, [{ id: id, position: position, list_id: list_id }]);
+  return data;
+};
+
+export const putCard = async (board_id: number, id: number, title: string, list_id: number, description?: string) => {
+  const { data } = await instance.put(`/board/${board_id}/card/${id}`, {
+    title: title,
+    description: description,
+    list_id: list_id,
+  });
+  return data;
 };

@@ -20,20 +20,20 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
   
-  .modal-actions button {
-    margin: 10px;
-    &:first-of-type {
-      background-color: #f16666; 
-      color: white;
-      height: 35px;
-    }
+  // .modal-actions button {
+  //   margin: 10px;
+  //   &:first-of-type {
+  //     background-color: #f16666; 
+  //     color: white;
+  //     height: 35px;
+  //   }
 
-    &:last-of-type {
-      background-color:#4CAF50;
-      color: white;
-      height: 35px;
-    }
-  }
+  //   &:last-of-type {
+  //     background-color:#4CAF50;
+  //     color: white;
+  //     height: 35px;
+  //   }
+  // }
   button {
     margin-top: 10px;
     padding: 10px 15px;
@@ -41,15 +41,15 @@
     border-radius: 3px;
     cursor: pointer;
 
-    &:first-of-type {
-      background-color:#df5959; 
-      color: white;
-      height: 35px;
-    }
+    // &:first-of-type {
+    //   background-color:#df5959; 
+    //   color: white;
+    //   height: 35px;
+    // }
 
-    &:last-of-type {
-      background-color:#4CAF50;  
-      color: white;
-      height: 35px;
-    }
+    // &:last-of-type {
+    //   background-color:#4CAF50;  
+    //   color: white;
+    //   height: 35px;
+    // }
   }

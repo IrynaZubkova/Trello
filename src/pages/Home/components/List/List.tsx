@@ -1,26 +1,41 @@
 import React, { useState } from 'react';
 import './list.scss';
-import { ListProps } from '../../../../common/interfaces/ListProps';
+import { IList } from '../../../../common/interfaces/BoardData';
 import ModalForCard from './ModalForCard';
-import { apiDeleteCard } from '../../../../api/card';
+import { apiAddCard, apiDeleteCard } from '../../../../api/card';
 import { regex } from '../../../../common/constants/regex';
 import { toast } from 'react-toastify';
+import { useDragAndDrop } from './dragNDrop';
 
 function List({
   id,
   boardId,
   title,
   cards: initialCards,
+  // position,
   update,
   updateTitle,
-}: ListProps & { update: () => void; updateTitle: (id: number, newTitle: string) => void }): React.ReactElement {
+  onCardDrop,
+  allLists,
+  setAllLists,
+  listsRef,
+}: IList & {
+  update: () => void;
+  updateTitle: (id: number, newTitle: string) => void;
+  onCardDrop: (updatedLists: IList[]) => void;
+  allLists: IList[];
+  setAllLists: React.Dispatch<React.SetStateAction<IList[]>>;
+  listsRef: React.MutableRefObject<IList[]>;
+}): React.ReactElement {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [cardTitle, setCardTitle] = useState<string>('');
   const [cardDescription, setCardDescription] = useState<string>('');
   const [cardCustom, setCardCustom] = useState<{ deadline: string }>({ deadline: '' });
-
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>(title);
+
+  const { handleDragStart, handleDragEnd, handleDragLeave, handleDragEnter, handleDrop, handleDragOver, dragOverSlot } =
+    useDragAndDrop(initialCards, update, allLists, onCardDrop, listsRef);
 
   const handleAddCard = async () => {
     try {
@@ -33,15 +48,26 @@ function List({
       };
 
       console.log('Creating new card:', newCard);
+      const savedCard = await apiAddCard(
+        boardId,
+        newCard.list_id,
+        newCard.title,
+        newCard.position,
+        newCard.description,
+        newCard.custom
+      );
 
-      // const response = await apiAddCard(
-      //   boardId,
-      //   newCard.list_id,
-      //   newCard.title,
-      //   newCard.position,
-      //   newCard.description,
-      //   newCard.custom
-      // );
+      const updatedLists = allLists.map((list) => {
+        if (list.id === id) {
+          return {
+            ...list,
+            cards: [...list.cards, savedCard], // додаємо нову картку в список
+          };
+        }
+        return list;
+      });
+
+      setAllLists(updatedLists);
       update();
       console.log('updated!');
       setModalOpen(false);
@@ -90,7 +116,7 @@ function List({
   };
 
   return (
-    <div className="list">
+    <div className="list" onDragOver={handleDragOver}>
       {isEditing ? (
         <input
           type="text"
@@ -99,6 +125,7 @@ function List({
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           autoFocus
+          className="edit-title-input"
         />
       ) : (
         <h2 className="list-title" onClick={handleTitleEdit}>
@@ -107,8 +134,18 @@ function List({
       )}
       <div className="card-list-container">
         <ul>
-          {initialCards.map((card) => (
-            <li key={card.id} className="card-item">
+          {initialCards.map((card, index) => (
+            <li
+              key={card.id}
+              className={`card-item ${dragOverSlot === index ? 'drag-over' : ''}`}
+              draggable={true}
+              onDragStart={(e) => handleDragStart(e, card, id)}
+              onDragEnd={handleDragEnd}
+              onDragEnter={(e) => handleDragEnter(e, index)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, id)}
+              onDragOver={handleDragOver}
+            >
               <span>{card.title}</span>
               <button className="delete-card-button" onClick={() => handleDeleteCard(card.id)}>
                 Х

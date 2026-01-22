@@ -93,3 +93,19 @@
   opacity: 0.5;  
   border: 2px dashed #ccc;  
 }
+
+.card-list-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 5;
+  min-height: 40px;
+}
+
+.card-item.drag-over-top {
+  border-top: 3px solid #5cebe4;
+}
+
+.card-item.drag-over-bottom {
+  border-bottom: 3px solid #5cebe4;
+}
+

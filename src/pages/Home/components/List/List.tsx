@@ -34,8 +34,11 @@ function List({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>(title);
 
-  const { handleDragStart, handleDragEnd, handleDragLeave, handleDragEnter, handleDrop, handleDragOver, dragOverSlot } =
-    useDragAndDrop(initialCards, update, allLists, onCardDrop, listsRef);
+  const { handleDragStart, handleDragEnd, handleDragEnter, handleDrop, handleDragOver, dragOverSlot } = useDragAndDrop(
+    allLists,
+    listsRef,
+    onCardDrop
+  );
 
   const handleAddCard = async () => {
     try {
@@ -133,27 +136,52 @@ function List({
         </h2>
       )}
       <div className="card-list-container">
-        <ul>
-          {initialCards.map((card, index) => (
+        <ul
+          onDragOver={handleDragOver}
+          onDrop={(e) => {
+            const listCards = allLists.find((list) => list.id === id)?.cards || [];
+            if (listCards.length === 0) {
+              // якщо список порожній, вставляємо картку на 0 позицію
+              handleDrop(e, id, 0);
+            }
+          }}
+        >
+          {initialCards.length === 0 && (
             <li
-              key={card.id}
-              className={`card-item ${dragOverSlot === index ? 'drag-over' : ''}`}
-              draggable={true}
-              onDragStart={(e) => handleDragStart(e, card, id)}
-              onDragEnd={handleDragEnd}
-              onDragEnter={(e) => handleDragEnter(e, index)}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, id)}
+              className={`empty-drop-zone ${dragOverSlot?.listId === id ? 'drag-over' : ''}`}
               onDragOver={handleDragOver}
-            >
-              <span>{card.title}</span>
-              <button className="delete-card-button" onClick={() => handleDeleteCard(card.id)}>
-                Х
-              </button>
-            </li>
-          ))}
+              onDrop={(e) => handleDrop(e, id, 0)}
+            ></li>
+          )}
+
+          {initialCards.map((card, index) => {
+            let dragClass = '';
+            if (dragOverSlot?.listId === id) {
+              if (dragOverSlot.index === index) dragClass = 'drag-over-top';
+              else if (dragOverSlot.index === index + 1) dragClass = 'drag-over-bottom';
+            }
+
+            return (
+              <li
+                key={card.id}
+                className={`card-item ${dragClass}`}
+                draggable
+                onDragStart={(e) => handleDragStart(e, card, id)}
+                onDragEnd={handleDragEnd}
+                onDragEnter={(e) => handleDragEnter(e, id, index)}
+                onDrop={(e) => handleDrop(e, id)}
+                onDragOver={handleDragOver}
+              >
+                <span>{card.title}</span>
+                <button className="delete-card-button" onClick={() => handleDeleteCard(card.id)}>
+                  Х
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </div>
+
       <button className="add-card-button" onClick={() => setModalOpen(true)}>
         Додати картку
       </button>
